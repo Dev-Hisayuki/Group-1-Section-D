@@ -1,0 +1,610 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roles Management | School Library System</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f7f4;
+            color: #26352b;
+        }
+
+        header {
+            background: #294f37;
+            color: white;
+            padding: 22px 7%;
+        }
+
+        header h1 {
+            font-size: 24px;
+            margin-bottom: 6px;
+        }
+
+        header p {
+            color: #dcebdc;
+            font-size: 14px;
+        }
+
+        nav {
+            background: white;
+            padding: 14px 7%;
+            border-bottom: 1px solid #e0e8e0;
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        nav a {
+            color: #315c3d;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+
+        main {
+            width: 86%;
+            max-width: 1200px;
+            margin: 32px auto;
+        }
+
+        .page-heading {
+            margin-bottom: 22px;
+        }
+
+        .page-heading h2 {
+            font-size: 25px;
+            margin-bottom: 8px;
+        }
+
+        .page-heading p {
+            color: #718075;
+            font-size: 14px;
+        }
+
+        .layout {
+            display: grid;
+            grid-template-columns: 330px minmax(0, 1fr);
+            gap: 24px;
+            align-items: start;
+        }
+
+        .card {
+            background: white;
+            border: 1px solid #e4ebe4;
+            border-radius: 14px;
+            padding: 24px;
+            box-shadow: 0 5px 20px rgba(32, 64, 40, 0.04);
+        }
+
+        .card h3 {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 17px;
+        }
+
+        label {
+            display: block;
+            font-size: 13px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        input,
+        textarea {
+            width: 100%;
+            padding: 11px 12px;
+            border: 1px solid #d7e0d7;
+            border-radius: 8px;
+            font: inherit;
+            font-size: 14px;
+            background: white;
+        }
+
+        input:focus,
+        textarea:focus {
+            outline: 2px solid #c8dfca;
+            border-color: #507b58;
+        }
+
+        textarea {
+            min-height: 95px;
+            resize: vertical;
+        }
+
+        .button-row {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            border: none;
+            border-radius: 8px;
+            padding: 11px 15px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.2s;
+        }
+
+        button:hover {
+            transform: translateY(-1px);
+            filter: brightness(0.96);
+        }
+
+        .primary {
+            background: #315c3d;
+            color: white;
+        }
+
+        .secondary {
+            background: #e8eee8;
+            color: #344b38;
+        }
+
+        .edit-button {
+            background: #e5efe6;
+            color: #315c3d;
+        }
+
+        .delete-button {
+            background: #fae8e6;
+            color: #a23932;
+        }
+
+        .table-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 18px;
+            flex-wrap: wrap;
+        }
+
+        .table-header h3 {
+            margin: 0;
+        }
+
+        .count {
+            color: #657568;
+            font-size: 13px;
+        }
+
+        .table-wrapper {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        th,
+        td {
+            padding: 14px 12px;
+            text-align: left;
+            border-bottom: 1px solid #edf1ed;
+            vertical-align: top;
+        }
+
+        th {
+            background: #f7faf7;
+            color: #637366;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+        }
+
+        td {
+            overflow-wrap: anywhere;
+        }
+
+        .role-name {
+            font-weight: bold;
+            color: #294f37;
+        }
+
+        .actions {
+            display: flex;
+            gap: 7px;
+        }
+
+        .actions button {
+            padding: 8px 10px;
+            font-size: 12px;
+        }
+
+        .message {
+            display: none;
+            margin-bottom: 18px;
+            padding: 12px 14px;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .message.success {
+            display: block;
+            background: #e3f3e5;
+            color: #245b30;
+        }
+
+        .message.error {
+            display: block;
+            background: #fbe9e7;
+            color: #9a3029;
+        }
+
+        .empty {
+            text-align: center;
+            color: #7c897e;
+            padding: 28px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 25px;
+            color: #7a877c;
+            font-size: 13px;
+        }
+
+        @media (max-width: 850px) {
+            .layout {
+                grid-template-columns: 1fr;
+            }
+
+            main {
+                width: 92%;
+                margin-top: 24px;
+            }
+        }
+
+        @media (max-width: 500px) {
+            header {
+                padding: 20px 5%;
+            }
+
+            nav {
+                padding: 13px 5%;
+                gap: 14px;
+            }
+
+            .card {
+                padding: 17px;
+            }
+
+            .page-heading h2 {
+                font-size: 22px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>School Library Management System</h1>
+        <p>Administration Panel</p>
+    </header>
+
+    <nav>
+        <a href="/">Home</a>
+        <a href="/categories.html">Categories</a>
+        <a href="/roles.html">Roles</a>
+    </nav>
+
+    <main>
+        <div class="page-heading">
+            <h2>Roles Management</h2>
+            <p>Create and manage the roles used in the library system.</p>
+        </div>
+
+        <div id="message" class="message" role="status" aria-live="polite"></div>
+
+        <div class="layout">
+            <section class="card">
+                <h3 id="formTitle">Add New Role</h3>
+
+                <form id="roleForm">
+                    <input type="hidden" id="roleId">
+
+                    <div class="form-group">
+                        <label for="roleName">Role Name *</label>
+                        <input
+                            type="text"
+                            id="roleName"
+                            maxlength="50"
+                            placeholder="e.g. Librarian"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="description">Description</label>
+                        <textarea
+                            id="description"
+                            maxlength="255"
+                            placeholder="Describe the role's responsibilities"
+                        ></textarea>
+                    </div>
+
+                    <div class="button-row">
+                        <button type="submit" class="primary" id="submitButton">
+                            Save Role
+                        </button>
+
+                        <button
+                            type="button"
+                            class="secondary"
+                            id="cancelButton"
+                            hidden
+                        >
+                            Cancel
+                        </button>
+                    </div>
+                </form>
+            </section>
+
+            <section class="card">
+                <div class="table-header">
+                    <h3>Role List</h3>
+                    <span class="count" id="roleCount">0 roles</span>
+                </div>
+
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Role</th>
+                                <th>Description</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="rolesTable">
+                            <tr>
+                                <td colspan="4" class="empty">Loading roles...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer>
+        School Library Management System
+    </footer>
+
+    <script>
+        const API_URL = '/api/roles';
+
+        const roleForm = document.getElementById('roleForm');
+        const roleIdInput = document.getElementById('roleId');
+        const roleNameInput = document.getElementById('roleName');
+        const descriptionInput = document.getElementById('description');
+        const rolesTable = document.getElementById('rolesTable');
+        const roleCount = document.getElementById('roleCount');
+        const messageBox = document.getElementById('message');
+        const formTitle = document.getElementById('formTitle');
+        const submitButton = document.getElementById('submitButton');
+        const cancelButton = document.getElementById('cancelButton');
+
+        let roles = [];
+
+        function showMessage(message, type) {
+            messageBox.textContent = message;
+            messageBox.className = `message ${type}`;
+
+            window.setTimeout(() => {
+                messageBox.className = 'message';
+                messageBox.textContent = '';
+            }, 4000);
+        }
+
+        async function requestApi(url, options = {}) {
+            const response = await fetch(url, options);
+            const result = await response.json();
+
+            if (!response.ok || result.success === false) {
+                throw new Error(
+                    result.error?.message || 'The request failed.'
+                );
+            }
+
+            return result;
+        }
+
+        async function loadRoles() {
+            rolesTable.innerHTML = `
+                <tr>
+                    <td colspan="4" class="empty">Loading roles...</td>
+                </tr>
+            `;
+
+            try {
+                const result = await requestApi(API_URL);
+                roles = result.data || [];
+                renderRoles();
+            } catch (error) {
+                rolesTable.innerHTML = `
+                    <tr>
+                        <td colspan="4" class="empty">Unable to load roles.</td>
+                    </tr>
+                `;
+                showMessage(error.message, 'error');
+            }
+        }
+
+        function renderRoles() {
+            roleCount.textContent =
+                `${roles.length} ${roles.length === 1 ? 'role' : 'roles'}`;
+
+            if (roles.length === 0) {
+                rolesTable.innerHTML = `
+                    <tr>
+                        <td colspan="4" class="empty">
+                            No roles found. Add your first role.
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            rolesTable.replaceChildren();
+
+            roles.forEach(role => {
+                const row = document.createElement('tr');
+
+                const idCell = document.createElement('td');
+                idCell.textContent = role.role_id;
+
+                const nameCell = document.createElement('td');
+                nameCell.className = 'role-name';
+                nameCell.textContent = role.role_name;
+
+                const descriptionCell = document.createElement('td');
+                descriptionCell.textContent =
+                    role.description || 'No description';
+
+                const actionsCell = document.createElement('td');
+                const actions = document.createElement('div');
+                actions.className = 'actions';
+
+                const editButton = document.createElement('button');
+                editButton.type = 'button';
+                editButton.className = 'edit-button';
+                editButton.textContent = 'Edit';
+                editButton.addEventListener('click', () => editRole(role.role_id));
+
+                const deleteButton = document.createElement('button');
+                deleteButton.type = 'button';
+                deleteButton.className = 'delete-button';
+                deleteButton.textContent = 'Delete';
+                deleteButton.addEventListener('click', () => deleteRole(role.role_id));
+
+                actions.append(editButton, deleteButton);
+                actionsCell.appendChild(actions);
+                row.append(idCell, nameCell, descriptionCell, actionsCell);
+                rolesTable.appendChild(row);
+            });
+        }
+
+        function resetForm() {
+            roleForm.reset();
+            roleIdInput.value = '';
+            formTitle.textContent = 'Add New Role';
+            submitButton.textContent = 'Save Role';
+            cancelButton.hidden = true;
+        }
+
+        function editRole(id) {
+            const role = roles.find(item => item.role_id === id);
+
+            if (!role) {
+                showMessage('Role not found.', 'error');
+                return;
+            }
+
+            roleIdInput.value = role.role_id;
+            roleNameInput.value = role.role_name;
+            descriptionInput.value = role.description || '';
+
+            formTitle.textContent = 'Edit Role';
+            submitButton.textContent = 'Update Role';
+            cancelButton.hidden = false;
+
+            roleNameInput.focus();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        async function deleteRole(id) {
+            const role = roles.find(item => item.role_id === id);
+
+            if (!role) {
+                showMessage('Role not found.', 'error');
+                return;
+            }
+
+            if (!window.confirm(`Delete the role "${role.role_name}"?`)) {
+                return;
+            }
+
+            try {
+                const result = await requestApi(`${API_URL}/${id}`, {
+                    method: 'DELETE'
+                });
+
+                showMessage(result.message || 'Role deleted successfully.', 'success');
+                resetForm();
+                await loadRoles();
+            } catch (error) {
+                showMessage(error.message, 'error');
+            }
+        }
+
+        roleForm.addEventListener('submit', async event => {
+            event.preventDefault();
+
+            const id = roleIdInput.value;
+            const payload = {
+                role_name: roleNameInput.value.trim(),
+                description: descriptionInput.value.trim()
+            };
+
+            if (!payload.role_name) {
+                showMessage('Role name is required.', 'error');
+                return;
+            }
+
+            submitButton.disabled = true;
+
+            try {
+                const url = id ? `${API_URL}/${id}` : API_URL;
+                const method = id ? 'PUT' : 'POST';
+
+                const result = await requestApi(url, {
+                    method,
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                showMessage(
+                    result.message || 'Role saved successfully.',
+                    'success'
+                );
+
+                resetForm();
+                await loadRoles();
+            } catch (error) {
+                showMessage(error.message, 'error');
+            } finally {
+                submitButton.disabled = false;
+            }
+        });
+
+        cancelButton.addEventListener('click', resetForm);
+
+        loadRoles();
+    </script>
+</body>
+</html>

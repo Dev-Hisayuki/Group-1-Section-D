@@ -1,0 +1,563 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Categories | School Library</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+            color: #263238;
+        }
+
+        header {
+            background: #234b38;
+            color: white;
+            padding: 22px 6%;
+        }
+
+        header h1 {
+            margin: 0 0 6px;
+            font-size: 24px;
+        }
+
+        header p {
+            margin: 0;
+            color: #dce9df;
+            font-size: 14px;
+        }
+
+        main {
+            max-width: 1100px;
+            margin: 32px auto;
+            padding: 0 20px;
+        }
+
+        .page-heading {
+            margin-bottom: 24px;
+        }
+
+        .page-heading h2 {
+            margin-bottom: 8px;
+        }
+
+        .page-heading p {
+            color: #64748b;
+            margin: 0;
+        }
+
+        .panel {
+            background: white;
+            padding: 24px;
+            border-radius: 12px;
+            box-shadow: 0 3px 12px #152b3b0d;
+            margin-bottom: 24px;
+        }
+
+        .panel h3 {
+            margin-top: 0;
+            margin-bottom: 20px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 16px;
+        }
+
+        .field {
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+        }
+
+        .field.full {
+            grid-column: 1 / -1;
+        }
+
+        label {
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 11px 12px;
+            border: 1px solid #d5dce2;
+            border-radius: 7px;
+            font: inherit;
+            background: white;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            outline: 2px solid #b7d6c2;
+            border-color: #315c43;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            border: 0;
+            border-radius: 7px;
+            padding: 10px 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity 0.2s, transform 0.2s;
+        }
+
+        button:hover {
+            opacity: 0.88;
+            transform: translateY(-1px);
+        }
+
+        .primary {
+            background: #315c43;
+            color: white;
+        }
+
+        .secondary {
+            background: #e9eef0;
+            color: #263238;
+        }
+
+        .danger {
+            background: #fde8e7;
+            color: #a52d2d;
+        }
+
+        .table-wrap {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 650px;
+        }
+
+        th, td {
+            padding: 14px 12px;
+            border-bottom: 1px solid #edf0f2;
+            text-align: left;
+            font-size: 14px;
+        }
+
+        th {
+            background: #f8faf9;
+            color: #53635a;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 5px 9px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .active {
+            color: #236b3b;
+            background: #e3f5e8;
+        }
+
+        .inactive {
+            color: #8a5a12;
+            background: #fff1d6;
+        }
+
+        .actions {
+            display: flex;
+            gap: 7px;
+        }
+
+        .actions button {
+            padding: 7px 10px;
+        }
+
+        #message {
+            display: none;
+            padding: 12px 15px;
+            border-radius: 7px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        #message.success {
+            display: block;
+            background: #e3f5e8;
+            color: #236b3b;
+        }
+
+        #message.error {
+            display: block;
+            background: #fde8e7;
+            color: #a52d2d;
+        }
+
+        #empty {
+            text-align: center;
+            padding: 25px;
+            color: #64748b;
+        }
+
+        .count {
+            color: #64748b;
+            font-size: 13px;
+            margin-top: 0;
+        }
+
+        @media (max-width: 650px) {
+            header {
+                padding: 20px;
+            }
+
+            main {
+                margin-top: 22px;
+                padding: 0 12px;
+            }
+
+            .panel {
+                padding: 17px;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .field.full {
+                grid-column: auto;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>School Library Management System</h1>
+        <p>Library administration / Categories</p>
+    </header>
+
+    <main>
+        <div class="page-heading">
+            <h2>Book Categories</h2>
+            <p>Create and manage the categories used to organize library books.</p>
+        </div>
+
+        <div id="message" role="status" aria-live="polite"></div>
+
+        <section class="panel">
+            <h3 id="formTitle">Add New Category</h3>
+
+            <form id="categoryForm">
+                <div class="form-grid">
+                    <div class="field">
+                        <label for="category_name">Category Name *</label>
+                        <input
+                            id="category_name"
+                            name="category_name"
+                            type="text"
+                            maxlength="100"
+                            placeholder="e.g. Science"
+                            required
+                        >
+                    </div>
+
+                    <div class="field">
+                        <label for="status">Status</label>
+                        <select id="status" name="status">
+                            <option value="Active">Active</option>
+                            <option value="Inactive">Inactive</option>
+                        </select>
+                    </div>
+
+                    <div class="field full">
+                        <label for="description">Description</label>
+                        <textarea
+                            id="description"
+                            name="description"
+                            maxlength="255"
+                            placeholder="Describe this category"
+                        ></textarea>
+                    </div>
+                </div>
+
+                <div class="buttons">
+                    <button class="primary" type="submit" id="saveButton">
+                        Save Category
+                    </button>
+
+                    <button
+                        class="secondary"
+                        type="button"
+                        id="cancelButton"
+                        hidden
+                    >
+                        Cancel Edit
+                    </button>
+                </div>
+            </form>
+        </section>
+
+        <section class="panel">
+            <h3>Category List</h3>
+            <p class="count" id="categoryCount">Loading categories...</p>
+
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Category Name</th>
+                            <th>Description</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="categoryTable"></tbody>
+                </table>
+            </div>
+
+            <p id="empty" hidden>No categories found.</p>
+        </section>
+    </main>
+
+    <script>
+        const API_URL = '/api/categories';
+
+        const form = document.getElementById('categoryForm');
+        const nameInput = document.getElementById('category_name');
+        const descriptionInput = document.getElementById('description');
+        const statusInput = document.getElementById('status');
+        const table = document.getElementById('categoryTable');
+        const message = document.getElementById('message');
+        const count = document.getElementById('categoryCount');
+        const empty = document.getElementById('empty');
+        const formTitle = document.getElementById('formTitle');
+        const saveButton = document.getElementById('saveButton');
+        const cancelButton = document.getElementById('cancelButton');
+
+        let editingId = null;
+
+        function showMessage(text, type) {
+            message.textContent = text;
+            message.className = type;
+
+            window.clearTimeout(showMessage.timer);
+
+            showMessage.timer = window.setTimeout(() => {
+                message.textContent = '';
+                message.className = '';
+            }, 4000);
+        }
+
+        async function request(url, options = {}) {
+            const response = await fetch(url, options);
+
+            let result;
+
+            try {
+                result = await response.json();
+            } catch {
+                throw new Error('The server returned an invalid response.');
+            }
+
+            if (!response.ok || result.success === false) {
+                throw new Error(
+                    result.error?.message || 'The request failed.'
+                );
+            }
+
+            return result;
+        }
+
+        function makeCell(value) {
+            const cell = document.createElement('td');
+            cell.textContent = value ?? '';
+            return cell;
+        }
+
+        async function loadCategories() {
+            table.replaceChildren();
+            count.textContent = 'Loading categories...';
+            empty.hidden = true;
+
+            try {
+                const result = await request(API_URL);
+                const categories = result.data || [];
+
+                count.textContent =
+                    `${categories.length} categor${categories.length === 1 ? 'y' : 'ies'}`;
+
+                for (const category of categories) {
+                    const row = document.createElement('tr');
+
+                    row.appendChild(makeCell(category.category_id));
+                    row.appendChild(makeCell(category.category_name));
+                    row.appendChild(makeCell(category.description || '—'));
+
+                    const statusCell = document.createElement('td');
+                    const statusLabel = document.createElement('span');
+
+                    statusLabel.className =
+                        'status ' +
+                        (category.status === 'Active' ? 'active' : 'inactive');
+
+                    statusLabel.textContent = category.status;
+                    statusCell.appendChild(statusLabel);
+                    row.appendChild(statusCell);
+
+                    const actionsCell = document.createElement('td');
+                    const actions = document.createElement('div');
+                    actions.className = 'actions';
+
+                    const editButton = document.createElement('button');
+                    editButton.type = 'button';
+                    editButton.className = 'secondary';
+                    editButton.textContent = 'Edit';
+                    editButton.addEventListener('click', () => {
+                        startEdit(category);
+                    });
+
+                    const deleteButton = document.createElement('button');
+                    deleteButton.type = 'button';
+                    deleteButton.className = 'danger';
+                    deleteButton.textContent = 'Delete';
+                    deleteButton.addEventListener('click', () => {
+                        deleteCategory(category.category_id, category.category_name);
+                    });
+
+                    actions.append(editButton, deleteButton);
+                    actionsCell.appendChild(actions);
+                    row.appendChild(actionsCell);
+
+                    table.appendChild(row);
+                }
+
+                empty.hidden = categories.length !== 0;
+            } catch (error) {
+                count.textContent = 'Could not load categories.';
+                showMessage(error.message, 'error');
+            }
+        }
+
+        function startEdit(category) {
+            editingId = category.category_id;
+
+            nameInput.value = category.category_name;
+            descriptionInput.value = category.description || '';
+            statusInput.value = category.status;
+
+            formTitle.textContent = 'Edit Category';
+            saveButton.textContent = 'Update Category';
+            cancelButton.hidden = false;
+
+            form.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            nameInput.focus();
+        }
+
+        function resetForm() {
+            editingId = null;
+            form.reset();
+
+            formTitle.textContent = 'Add New Category';
+            saveButton.textContent = 'Save Category';
+            cancelButton.hidden = true;
+        }
+
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            const category = {
+                category_name: nameInput.value.trim(),
+                description: descriptionInput.value.trim(),
+                status: statusInput.value
+            };
+
+            if (!category.category_name) {
+                showMessage('Please enter a category name.', 'error');
+                nameInput.focus();
+                return;
+            }
+
+            saveButton.disabled = true;
+
+            try {
+                const isEditing = editingId !== null;
+                const url = isEditing
+                    ? `${API_URL}/${editingId}`
+                    : API_URL;
+
+                await request(url, {
+                    method: isEditing ? 'PUT' : 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(category)
+                });
+
+                showMessage(
+                    isEditing
+                        ? 'Category updated successfully.'
+                        : 'Category created successfully.',
+                    'success'
+                );
+
+                resetForm();
+                await loadCategories();
+            } catch (error) {
+                showMessage(error.message, 'error');
+            } finally {
+                saveButton.disabled = false;
+            }
+        });
+
+        cancelButton.addEventListener('click', resetForm);
+
+        async function deleteCategory(id, name) {
+            const confirmed = window.confirm(
+                `Are you sure you want to delete "${name}"?`
+            );
+
+            if (!confirmed) {
+                return;
+            }
+
+            try {
+                await request(`${API_URL}/${id}`, {
+                    method: 'DELETE'
+                });
+
+                if (editingId === id) {
+                    resetForm();
+                }
+
+                showMessage('Category deleted successfully.', 'success');
+                await loadCategories();
+            } catch (error) {
+                showMessage(error.message, 'error');
+            }
+        }
+
+        loadCategories();
+    </script>
+</body>
+</html>
