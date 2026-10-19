@@ -1,0 +1,915 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | Library Management</title>
+    <link rel="stylesheet" href="css/style.css">
+
+    <style>
+        .dashboard-content {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .welcome-banner {
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 24px;
+            padding: 30px 32px;
+            border-radius: 18px;
+            background: linear-gradient(120deg, #244b35, #39734e);
+            color: #fff;
+            box-shadow: 0 8px 24px rgba(36, 75, 53, 0.12);
+        }
+
+        .welcome-banner::after {
+            content: "";
+            position: absolute;
+            width: 230px;
+            height: 230px;
+            right: 80px;
+            top: -130px;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 50%;
+            box-shadow:
+                0 0 0 28px rgba(255, 255, 255, 0.035),
+                0 0 0 56px rgba(255, 255, 255, 0.025);
+            pointer-events: none;
+        }
+
+        .welcome-copy {
+            position: relative;
+            z-index: 1;
+        }
+
+        .welcome-eyebrow {
+            margin: 0 0 10px;
+            color: #c8e2ce;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 1.8px;
+            text-transform: uppercase;
+        }
+
+        .welcome-banner h1 {
+            margin: 0 0 10px;
+            color: #fff;
+            font-size: clamp(25px, 3vw, 34px);
+            line-height: 1.2;
+        }
+
+        .welcome-banner p {
+            max-width: 520px;
+            margin: 0;
+            color: #e0eee3;
+            font-size: 14px;
+            line-height: 1.7;
+        }
+
+        .welcome-icon {
+            position: relative;
+            z-index: 1;
+            display: grid;
+            flex: 0 0 86px;
+            width: 86px;
+            height: 86px;
+            place-items: center;
+            border: 1px solid rgba(255, 255, 255, 0.22);
+            border-radius: 22px;
+            background: rgba(255, 255, 255, 0.10);
+            color: #fff;
+            font-size: 43px;
+        }
+
+        .dashboard-section {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .section-heading {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 16px;
+        }
+
+        .section-heading h2 {
+            margin: 0 0 5px;
+            color: #263b2e;
+            font-size: 19px;
+        }
+
+        .section-heading p {
+            margin: 0;
+            color: #7b867e;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .dashboard-stats {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 18px;
+        }
+
+        .dashboard-stat {
+            min-width: 0;
+            padding: 22px;
+            border: 1px solid #e7ece6;
+            border-radius: 16px;
+            background: #fff;
+            box-shadow: 0 4px 14px rgba(31, 55, 38, 0.035);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .dashboard-stat:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 24px rgba(31, 55, 38, 0.08);
+        }
+
+        .stat-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .stat-icon {
+            display: grid;
+            width: 45px;
+            height: 45px;
+            flex: 0 0 45px;
+            place-items: center;
+            border-radius: 13px;
+            font-size: 22px;
+        }
+
+        .stat-icon.users {
+            background: #eaf1ff;
+            color: #4167b2;
+        }
+
+        .stat-icon.roles {
+            background: #f2eaff;
+            color: #7951a6;
+        }
+
+        .stat-icon.categories {
+            background: #e5f4e9;
+            color: #34764a;
+        }
+
+        .stat-label {
+            margin: 0 0 8px;
+            color: #778279;
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .stat-number {
+            margin: 0;
+            color: #263b2e;
+            font-size: 34px;
+            font-weight: 700;
+            line-height: 1.15;
+            letter-spacing: -1px;
+        }
+
+        .stat-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin-top: 19px;
+            padding-top: 15px;
+            border-top: 1px solid #edf0ec;
+        }
+
+        .stat-caption {
+            color: #879087;
+            font-size: 12px;
+        }
+
+        .stat-link {
+            color: #34764a;
+            font-size: 12px;
+            font-weight: 700;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+
+        .stat-link:hover {
+            color: #214c31;
+            text-decoration: underline;
+        }
+
+        .quick-access-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 18px;
+        }
+
+        .quick-access-card {
+            display: flex;
+            min-width: 0;
+            flex-direction: column;
+            align-items: flex-start;
+            padding: 23px;
+            border: 1px solid #e7ece6;
+            border-radius: 16px;
+            background: #fff;
+            color: inherit;
+            text-decoration: none;
+            box-shadow: 0 4px 14px rgba(31, 55, 38, 0.035);
+            transition: transform 0.2s ease, border-color 0.2s ease,
+                box-shadow 0.2s ease;
+        }
+
+        .quick-access-card:hover {
+            transform: translateY(-3px);
+            border-color: #b7d2bc;
+            box-shadow: 0 10px 24px rgba(31, 55, 38, 0.075);
+        }
+
+        .quick-icon {
+            display: grid;
+            width: 48px;
+            height: 48px;
+            margin-bottom: 19px;
+            place-items: center;
+            border-radius: 14px;
+            background: #edf5ee;
+            color: #315f3e;
+            font-size: 23px;
+        }
+
+        .quick-access-card h3 {
+            margin: 0 0 9px;
+            color: #293b2e;
+            font-size: 16px;
+        }
+
+        .quick-access-card p {
+            flex: 1;
+            margin: 0 0 20px;
+            color: #7c867e;
+            font-size: 13px;
+            line-height: 1.7;
+        }
+
+        .quick-card-link {
+            display: flex;
+            width: 100%;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            padding-top: 14px;
+            border-top: 1px solid #edf0ec;
+            color: #34764a;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .quick-card-link span:last-child {
+            font-size: 17px;
+            transition: transform 0.2s ease;
+        }
+
+        .quick-access-card:hover .quick-card-link span:last-child {
+            transform: translateX(4px);
+        }
+
+        .system-panel {
+            padding: 22px 24px;
+            border: 1px solid #e7ece6;
+            border-radius: 16px;
+            background: #fff;
+            box-shadow: 0 4px 14px rgba(31, 55, 38, 0.035);
+        }
+
+        .system-panel-heading {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            margin-bottom: 18px;
+        }
+
+        .system-panel-icon {
+            display: grid;
+            width: 42px;
+            height: 42px;
+            flex: 0 0 42px;
+            place-items: center;
+            border-radius: 12px;
+            background: #edf5ee;
+            color: #315f3e;
+            font-size: 20px;
+        }
+
+        .system-panel-heading h2 {
+            margin: 0 0 5px;
+            color: #293b2e;
+            font-size: 16px;
+        }
+
+        .system-panel-heading p {
+            margin: 0;
+            color: #7c867e;
+            font-size: 12px;
+        }
+
+        .system-status {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+            padding: 14px 16px;
+            border: 1px solid #e5ece5;
+            border-radius: 11px;
+            background: #f8faf7;
+            color: #536156;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .status-indicator {
+            display: inline-block;
+            width: 9px;
+            height: 9px;
+            flex: 0 0 9px;
+            border-radius: 50%;
+            background: #d5a03d;
+        }
+
+        .system-status.status-ok .status-indicator {
+            background: #3b9456;
+            box-shadow: 0 0 0 4px rgba(59, 148, 86, 0.11);
+        }
+
+        .system-status.status-error .status-indicator {
+            background: #c75454;
+            box-shadow: 0 0 0 4px rgba(199, 84, 84, 0.10);
+        }
+
+        .topbar-user {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-left: auto;
+            color: #445349;
+            font-size: 13px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .admin-avatar {
+            display: grid;
+            width: 38px;
+            height: 38px;
+            flex: 0 0 38px;
+            place-items: center;
+            border: 1px solid #dce8dd;
+            border-radius: 50%;
+            background: #edf5ee;
+            color: #315f3e;
+            font-size: 16px;
+        }
+
+        .logout-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
+            padding: 10px 14px;
+            border: 1px solid #dce8dd;
+            border-radius: 8px;
+            background: #fff;
+            color: #315f3e;
+            font-family: inherit;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s ease, color 0.2s ease,
+                border-color 0.2s ease;
+        }
+
+        .logout-button:hover {
+            border-color: #315f3e;
+            background: #315f3e;
+            color: #fff;
+        }
+
+        .logout-button:disabled {
+            cursor: wait;
+            opacity: 0.65;
+        }
+
+        .dashboard-refresh {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+        }
+
+        .dashboard-refresh:disabled {
+            cursor: wait;
+            opacity: 0.65;
+        }
+
+        @media (max-width: 1000px) {
+            .dashboard-stats,
+            .quick-access-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .dashboard-stat:last-child,
+            .quick-access-card:last-child {
+                grid-column: 1 / -1;
+            }
+        }
+
+        @media (max-width: 650px) {
+            .dashboard-content {
+                gap: 20px;
+            }
+
+            .welcome-banner {
+                padding: 24px 21px;
+            }
+
+            .welcome-icon {
+                width: 57px;
+                height: 57px;
+                flex-basis: 57px;
+                border-radius: 15px;
+                font-size: 28px;
+            }
+
+            .welcome-banner h1 {
+                font-size: 25px;
+            }
+
+            .dashboard-stats,
+            .quick-access-grid {
+                grid-template-columns: 1fr;
+                gap: 13px;
+            }
+
+            .dashboard-stat:last-child,
+            .quick-access-card:last-child {
+                grid-column: auto;
+            }
+
+            .dashboard-stat {
+                padding: 19px;
+            }
+
+            .stat-top {
+                margin-bottom: 15px;
+            }
+
+            .stat-footer {
+                margin-top: 15px;
+            }
+
+            .quick-access-card {
+                padding: 20px;
+            }
+
+            .section-heading {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .topbar-user {
+                gap: 7px;
+            }
+
+            .topbar-user > span:not(.admin-avatar) {
+                display: none;
+            }
+
+            .logout-button {
+                padding: 9px 10px;
+                font-size: 12px;
+            }
+
+            .system-panel {
+                padding: 18px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .dashboard-stat,
+            .quick-access-card,
+            .quick-card-link span:last-child,
+            .logout-button {
+                transition: none;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="app">
+    <aside class="sidebar" id="sidebar">
+        <div class="brand">
+            <div class="brand-icon">📚</div>
+            <div>
+                <h2>Library Management</h2>
+                <p>School Library System</p>
+            </div>
+        </div>
+
+        <nav class="nav-list">
+            <a href="/dashboard.html" class="nav-link active" aria-current="page">
+                <span>⌂</span> Dashboard
+            </a>
+            <a href="/users.html" class="nav-link">
+                <span>♙</span> Users
+            </a>
+            <a href="/roles.html" class="nav-link">
+                <span>♧</span> Roles
+            </a>
+            <a href="/categories.html" class="nav-link">
+                <span>▤</span> Categories
+            </a>
+        </nav>
+    </aside>
+
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <main class="main">
+        <header class="topbar">
+            <button
+                type="button"
+                class="menu-toggle"
+                id="menuToggle"
+                aria-label="Toggle sidebar"
+            >☰</button>
+
+            <div>
+                <h2>Library Management</h2>
+                <p>Manage your library system records in one place.</p>
+            </div>
+
+            <div class="topbar-user">
+                <span class="admin-avatar">♙</span>
+                <span>Administrator</span>
+                <button
+                    type="button"
+                    class="logout-button"
+                    id="logoutButton"
+                >
+                    ↪ Log Out
+                </button>
+            </div>
+        </header>
+
+        <section class="content dashboard-content">
+            <section class="welcome-banner">
+                <div class="welcome-copy">
+                    <p class="welcome-eyebrow">School Library System</p>
+                    <h1>Welcome back, Administrator!</h1>
+                    <p>
+                        Manage your library records, maintain system users,
+                        and keep your information organized from one place.
+                    </p>
+                </div>
+                <div class="welcome-icon" aria-hidden="true">📚</div>
+            </section>
+
+            <section class="dashboard-section">
+                <div class="section-heading">
+                    <div>
+                        <h2>Overview</h2>
+                        <p>A quick summary of your library management records.</p>
+                    </div>
+                    <button
+                        type="button"
+                        class="btn btn-secondary dashboard-refresh"
+                        id="refreshButton"
+                    >
+                        <span>↻</span> Refresh Data
+                    </button>
+                </div>
+
+                <div id="message" class="message" hidden></div>
+
+                <div class="dashboard-stats">
+                    <article class="dashboard-stat">
+                        <div class="stat-top">
+                            <div>
+                                <p class="stat-label">Registered Users</p>
+                                <h3 class="stat-number" id="totalUsers">—</h3>
+                            </div>
+                            <div class="stat-icon users" aria-hidden="true">♙</div>
+                        </div>
+                        <div class="stat-footer">
+                            <span class="stat-caption">System accounts</span>
+                            <a class="stat-link" href="/users.html">View users →</a>
+                        </div>
+                    </article>
+
+                    <article class="dashboard-stat">
+                        <div class="stat-top">
+                            <div>
+                                <p class="stat-label">System Roles</p>
+                                <h3 class="stat-number" id="totalRoles">—</h3>
+                            </div>
+                            <div class="stat-icon roles" aria-hidden="true">♧</div>
+                        </div>
+                        <div class="stat-footer">
+                            <span class="stat-caption">Access management</span>
+                            <a class="stat-link" href="/roles.html">View roles →</a>
+                        </div>
+                    </article>
+
+                    <article class="dashboard-stat">
+                        <div class="stat-top">
+                            <div>
+                                <p class="stat-label">Book Categories</p>
+                                <h3 class="stat-number" id="totalCategories">—</h3>
+                            </div>
+                            <div class="stat-icon categories" aria-hidden="true">▤</div>
+                        </div>
+                        <div class="stat-footer">
+                            <span class="stat-caption">Library classification</span>
+                            <a class="stat-link" href="/categories.html">View categories →</a>
+                        </div>
+                    </article>
+                </div>
+            </section>
+
+            <section class="dashboard-section">
+                <div class="section-heading">
+                    <div>
+                        <h2>Quick Access</h2>
+                        <p>Go directly to the sections you manage most often.</p>
+                    </div>
+                </div>
+
+                <div class="quick-access-grid">
+                    <a href="/users.html" class="quick-access-card">
+                        <div class="quick-icon" aria-hidden="true">♙</div>
+                        <h3>User Management</h3>
+                        <p>
+                            Create user accounts, update user information,
+                            and manage existing system records.
+                        </p>
+                        <div class="quick-card-link">
+                            <span>Manage Users</span>
+                            <span>→</span>
+                        </div>
+                    </a>
+
+                    <a href="/roles.html" class="quick-access-card">
+                        <div class="quick-icon" aria-hidden="true">♧</div>
+                        <h3>Role Management</h3>
+                        <p>
+                            Organize system roles and maintain the role
+                            records used by your library application.
+                        </p>
+                        <div class="quick-card-link">
+                            <span>Manage Roles</span>
+                            <span>→</span>
+                        </div>
+                    </a>
+
+                    <a href="/categories.html" class="quick-access-card">
+                        <div class="quick-icon" aria-hidden="true">▤</div>
+                        <h3>Category Management</h3>
+                        <p>
+                            Add book categories, update descriptions,
+                            and keep your classification records organized.
+                        </p>
+                        <div class="quick-card-link">
+                            <span>Manage Categories</span>
+                            <span>→</span>
+                        </div>
+                    </a>
+                </div>
+            </section>
+
+            <section class="dashboard-section">
+                <div class="section-heading">
+                    <div>
+                        <h2>System Status</h2>
+                        <p>Check whether dashboard records loaded successfully.</p>
+                    </div>
+                </div>
+
+                <div class="system-panel">
+                    <div class="system-panel-heading">
+                        <div class="system-panel-icon" aria-hidden="true">✓</div>
+                        <div>
+                            <h2>Dashboard Data</h2>
+                            <p>Connection status for the summary information.</p>
+                        </div>
+                    </div>
+
+                    <div id="systemStatus" class="system-status">
+                        <span class="status-indicator"></span>
+                        <span>Loading system information...</span>
+                    </div>
+                </div>
+            </section>
+        </section>
+    </main>
+</div>
+
+<script>
+const API_ENDPOINTS = {
+    users: '/api/users',
+    roles: '/api/roles',
+    categories: '/api/categories'
+};
+
+const message = document.getElementById('message');
+const refreshButton = document.getElementById('refreshButton');
+const systemStatus = document.getElementById('systemStatus');
+const logoutButton = document.getElementById('logoutButton');
+
+function showMessage(text, type = 'error') {
+    message.textContent = text;
+    message.className = `message ${type}`;
+    message.hidden = false;
+}
+
+function hideMessage() {
+    message.hidden = true;
+    message.textContent = '';
+    message.className = 'message';
+}
+
+async function fetchRecords(endpoint, collectionName) {
+    const response = await fetch(endpoint, {
+        credentials: 'same-origin'
+    });
+
+    const result = await response.json();
+
+    if (response.status === 401) {
+        window.location.replace('/login.html');
+        throw new Error('Your session has expired. Please log in again.');
+    }
+
+    if (!response.ok) {
+        throw new Error(result.message || `Request failed: ${endpoint}`);
+    }
+
+    if (Array.isArray(result)) {
+        return result;
+    }
+
+    if (Array.isArray(result.data)) {
+        return result.data;
+    }
+
+    if (Array.isArray(result[collectionName])) {
+        return result[collectionName];
+    }
+
+    return [];
+}
+
+function setSystemStatus(type, text) {
+    systemStatus.className = `system-status ${type}`;
+    systemStatus.replaceChildren();
+
+    const indicator = document.createElement('span');
+    indicator.className = 'status-indicator';
+
+    const label = document.createElement('span');
+    label.textContent = text;
+
+    systemStatus.append(indicator, label);
+}
+
+async function loadDashboard() {
+    refreshButton.disabled = true;
+    refreshButton.innerHTML = '<span>↻</span> Loading...';
+    hideMessage();
+
+    setSystemStatus('', 'Loading dashboard information...');
+
+    try {
+        const results = await Promise.allSettled([
+            fetchRecords(API_ENDPOINTS.users, 'users'),
+            fetchRecords(API_ENDPOINTS.roles, 'roles'),
+            fetchRecords(API_ENDPOINTS.categories, 'categories')
+        ]);
+
+        const [users, roles, categories] = results;
+
+        document.getElementById('totalUsers').textContent =
+            users.status === 'fulfilled' ? users.value.length : '—';
+
+        document.getElementById('totalRoles').textContent =
+            roles.status === 'fulfilled' ? roles.value.length : '—';
+
+        document.getElementById('totalCategories').textContent =
+            categories.status === 'fulfilled' ? categories.value.length : '—';
+
+        const failed = results.filter(result => result.status === 'rejected');
+
+        if (failed.length === 0) {
+            setSystemStatus(
+                'status-ok',
+                'All dashboard summaries loaded successfully.'
+            );
+        } else {
+            setSystemStatus(
+                'status-error',
+                `${failed.length} summary request(s) failed. Check your server and API endpoints.`
+            );
+
+            showMessage(
+                'Some totals could not be loaded. Check that your Express server and API endpoints are running.',
+                'error'
+            );
+        }
+    } catch (error) {
+        setSystemStatus(
+            'status-error',
+            'Unable to load dashboard information.'
+        );
+
+        showMessage(
+            error.message || 'An unexpected error occurred while loading the dashboard.',
+            'error'
+        );
+    } finally {
+        refreshButton.disabled = false;
+        refreshButton.innerHTML = '<span>↻</span> Refresh Data';
+    }
+}
+
+async function logout() {
+    const confirmed = window.confirm('Are you sure you want to log out?');
+
+    if (!confirmed) {
+        return;
+    }
+
+    logoutButton.disabled = true;
+    logoutButton.textContent = 'Logging out...';
+
+    try {
+        const response = await fetch('/api/auth/logout', {
+            method: 'POST',
+            credentials: 'same-origin',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({})
+        });
+
+        if (!response.ok) {
+            throw new Error('The server could not complete the logout request.');
+        }
+
+        window.location.replace('/login.html');
+    } catch (error) {
+        logoutButton.disabled = false;
+        logoutButton.textContent = '↪ Log Out';
+
+        window.alert(
+            error.message || 'Unable to log out. Please try again.'
+        );
+    }
+}
+
+const sidebar = document.getElementById('sidebar');
+const sidebarOverlay = document.getElementById('sidebarOverlay');
+const menuToggle = document.getElementById('menuToggle');
+
+menuToggle.addEventListener('click', () => {
+    sidebar.classList.toggle('open');
+    sidebarOverlay.classList.toggle('open');
+});
+
+sidebarOverlay.addEventListener('click', () => {
+    sidebar.classList.remove('open');
+    sidebarOverlay.classList.remove('open');
+});
+
+window.addEventListener('resize', () => {
+    if (window.innerWidth > 900) {
+        sidebar.classList.remove('open');
+        sidebarOverlay.classList.remove('open');
+    }
+});
+
+refreshButton.addEventListener('click', loadDashboard);
+logoutButton.addEventListener('click', logout);
+
+loadDashboard();
+</script>
+</body>
+</html>

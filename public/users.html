@@ -1,0 +1,773 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Users | School Library Management System</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="app">
+        <aside class="sidebar" id="sidebar">
+            <a href="/dashboard.html" class="brand">
+                <div class="brand-icon">L</div>
+                <div>
+                    <div class="brand-name">Library System</div>
+                    <div class="brand-subtitle">ADMIN PANEL</div>
+                </div>
+            </a>
+
+            <div class="sidebar-section">MAIN MENU</div>
+
+            <nav class="nav-list">
+                <a href="/dashboard.html" class="nav-link">
+                    <span>⌂</span> Dashboard
+                </a>
+                <a href="/users.html" class="nav-link active" aria-current="page">
+                    <span>♙</span> Users
+                </a>
+                <a href="/roles.html" class="nav-link">
+                    <span>♧</span> Roles
+                </a>
+                <a href="/categories.html" class="nav-link">
+                    <span>▤</span> Categories
+                </a>
+            </nav>
+
+            <div class="sidebar-bottom">
+                <div class="sidebar-note">
+                    <strong>Library Management</strong>
+                    Manage your library system records in one place.
+                </div>
+            </div>
+
+            <div class="sidebar-footer">
+                <p>Administrator</p>
+                <small>School Library System</small>
+            </div>
+        </aside>
+
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+        <main class="main">
+            <header class="topbar">
+                <div class="topbar-left">
+                    <button
+                        class="menu-button"
+                        id="menuToggle"
+                        type="button"
+                        aria-label="Open navigation menu"
+                        aria-controls="sidebar"
+                        aria-expanded="false"
+                    >☰</button>
+
+                    <div>
+                        <h2>Users</h2>
+                        <p>Manage system accounts and permissions</p>
+                    </div>
+                </div>
+
+                <div class="topbar-right">
+                    <span class="topbar-label">Administrator</span>
+                    <div class="avatar">A</div>
+                </div>
+            </header>
+
+            <section class="content">
+                <div class="page-heading">
+                    <div>
+                        <div class="eyebrow">System Administration</div>
+                        <h1>User Management</h1>
+                        <p>Create, update, and manage accounts for your library system.</p>
+                    </div>
+
+                    <button class="btn btn-primary" id="addUserBtn" type="button">
+                        + Add User
+                    </button>
+                </div>
+
+                <div id="message" class="message" role="status" aria-live="polite" hidden></div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div>
+                            <p class="stat-label">Total Users</p>
+                            <div class="stat-value" id="totalUsers">0</div>
+                        </div>
+                        <div class="stat-icon">♙</div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div>
+                            <p class="stat-label">Active Users</p>
+                            <div class="stat-value" id="activeUsers">0</div>
+                        </div>
+                        <div class="stat-icon">✓</div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div>
+                            <p class="stat-label">Inactive Users</p>
+                            <div class="stat-value" id="inactiveUsers">0</div>
+                        </div>
+                        <div class="stat-icon">○</div>
+                    </div>
+                </div>
+
+                <section class="panel">
+                    <div class="panel-header">
+                        <div>
+                            <h2 class="panel-title">User List</h2>
+                            <p class="panel-description">View and manage registered system accounts.</p>
+                        </div>
+
+                        <div class="table-tools">
+                            <input
+                                class="form-control"
+                                type="search"
+                                id="searchInput"
+                                placeholder="Search users..."
+                                aria-label="Search users"
+                            >
+
+                            <button class="btn btn-outline" id="refreshBtn" type="button">
+                                ↻ Refresh
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="tableMessage" class="message" role="status" aria-live="polite" hidden></div>
+
+                    <div class="table-wrap">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Full Name</th>
+                                    <th>Username</th>
+                                    <th>Email</th>
+                                    <th>Role</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="userTableBody">
+                                <tr>
+                                    <td colspan="7">
+                                        <div class="empty-state">Loading users...</div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="table-footer">
+                        <span id="resultCount">Loading records...</span>
+                        <span>User Management</span>
+                    </div>
+                </section>
+
+                <footer class="page-footer">
+                    <span>School Library Management System</span>
+                    <span>Users</span>
+                </footer>
+            </section>
+        </main>
+    </div>
+
+    <div class="modal-backdrop" id="userModal" hidden>
+        <section class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+            <div class="modal-header">
+                <div>
+                    <h2 id="modalTitle">Add User</h2>
+                    <p id="modalDescription">Enter the details for the new user account.</p>
+                </div>
+
+                <button class="modal-close" id="closeModalBtn" type="button" aria-label="Close modal">
+                    &times;
+                </button>
+            </div>
+
+            <form id="userForm">
+                <div id="formMessage" class="message" role="alert" hidden></div>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="fullName">Full Name <span aria-hidden="true">*</span></label>
+                        <input
+                            class="form-control"
+                            type="text"
+                            id="fullName"
+                            name="full_name"
+                            maxlength="150"
+                            placeholder="Enter full name"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="username">Username <span aria-hidden="true">*</span></label>
+                        <input
+                            class="form-control"
+                            type="text"
+                            id="username"
+                            name="username"
+                            maxlength="100"
+                            placeholder="Enter username"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email <span aria-hidden="true">*</span></label>
+                        <input
+                            class="form-control"
+                            type="email"
+                            id="email"
+                            name="email"
+                            maxlength="255"
+                            placeholder="name@example.com"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="roleId">Role <span aria-hidden="true">*</span></label>
+                        <select class="form-control" id="roleId" name="role_id" required>
+                            <option value="">Select a role</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="userStatus">Status</label>
+                        <select class="form-control" id="userStatus" name="status">
+                            <option value="Active">Active</option>
+                            <option value="Inactive">Inactive</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">Password <span id="passwordRequired">*</span></label>
+                        <input
+                            class="form-control"
+                            type="password"
+                            id="password"
+                            name="password"
+                            minlength="8"
+                            autocomplete="new-password"
+                            placeholder="Enter password"
+                        >
+                        <small id="passwordHint">At least 8 characters.</small>
+                    </div>
+                </div>
+
+                <div class="modal-actions">
+                    <button class="btn btn-secondary" id="cancelModalBtn" type="button">
+                        Cancel
+                    </button>
+                    <button class="btn btn-primary" id="saveUserBtn" type="submit">
+                        Save User
+                    </button>
+                </div>
+            </form>
+        </section>
+    </div>
+
+    <script>
+        const USERS_API = "/api/users";
+        const ROLES_API = "/api/roles";
+
+        const sidebar = document.getElementById("sidebar");
+        const sidebarOverlay = document.getElementById("sidebarOverlay");
+        const menuToggle = document.getElementById("menuToggle");
+
+        const userModal = document.getElementById("userModal");
+        const userForm = document.getElementById("userForm");
+        const userTableBody = document.getElementById("userTableBody");
+
+        const message = document.getElementById("message");
+        const tableMessage = document.getElementById("tableMessage");
+        const formMessage = document.getElementById("formMessage");
+        const saveUserBtn = document.getElementById("saveUserBtn");
+
+        let users = [];
+        let roles = [];
+        let editingUserId = null;
+        let messageTimeout = null;
+
+        function escapeHTML(value) {
+            return String(value ?? "").replace(/[&<>"']/g, character => ({
+                "&": "&amp;",
+                "<": "&lt;",
+                ">": "&gt;",
+                '"': "&quot;",
+                "'": "&#039;"
+            })[character]);
+        }
+
+        function getUserId(user) {
+            return user.user_id ?? user.id;
+        }
+
+        function getRoleId(role) {
+            return role.role_id ?? role.id ?? role.roleId;
+        }
+
+        function getRoleName(role) {
+            return role.role_name ?? role.name ?? role.roleName ?? "";
+        }
+
+        function getUserStatus(user) {
+            return user.status ?? "Active";
+        }
+
+        function showMessage(element, text, type = "success") {
+            if (element === message && messageTimeout) {
+                clearTimeout(messageTimeout);
+            }
+
+            element.textContent = text;
+            element.className = `message ${type}`;
+            element.hidden = false;
+
+            if (element === message) {
+                messageTimeout = setTimeout(() => {
+                    element.hidden = true;
+                }, 5000);
+            }
+        }
+
+        function hideMessage(element) {
+            element.hidden = true;
+            element.textContent = "";
+            element.className = "message";
+        }
+
+        async function apiRequest(url, options = {}) {
+            const response = await fetch(url, {
+                ...options,
+                headers: {
+                    ...(options.body ? { "Content-Type": "application/json" } : {}),
+                    ...options.headers
+                }
+            });
+
+            const text = await response.text();
+            let data = {};
+
+            if (text) {
+                try {
+                    data = JSON.parse(text);
+                } catch {
+                    throw new Error("The server returned an invalid response.");
+                }
+            }
+
+            if (!response.ok || data.success === false) {
+                throw new Error(data.message || data.error || `Request failed (${response.status}).`);
+            }
+
+            return data;
+        }
+
+        function getArray(response, keys = []) {
+            if (Array.isArray(response)) return response;
+
+            for (const key of keys) {
+                if (Array.isArray(response?.[key])) return response[key];
+            }
+
+            return [];
+        }
+
+        async function loadRoles() {
+            const result = await apiRequest(ROLES_API);
+            roles = getArray(result, ["data", "roles"]);
+
+            const roleSelect = document.getElementById("roleId");
+            const selectedRole = roleSelect.value;
+
+            roleSelect.innerHTML = `
+                <option value="">Select a role</option>
+                ${roles.map(role => `
+                    <option value="${escapeHTML(getRoleId(role))}">
+                        ${escapeHTML(getRoleName(role))}
+                    </option>
+                `).join("")}
+            `;
+
+            if (roles.some(role => String(getRoleId(role)) === String(selectedRole))) {
+                roleSelect.value = selectedRole;
+            }
+        }
+
+        function renderUsers() {
+            const keyword = document.getElementById("searchInput").value.trim().toLowerCase();
+
+            const filteredUsers = users.filter(user => {
+                const values = [
+                    getUserId(user),
+                    user.full_name,
+                    user.username,
+                    user.email,
+                    user.role_name,
+                    user.role,
+                    getUserStatus(user)
+                ];
+
+                return values.some(value =>
+                    String(value ?? "").toLowerCase().includes(keyword)
+                );
+            });
+
+            document.getElementById("totalUsers").textContent = users.length;
+
+            document.getElementById("activeUsers").textContent =
+                users.filter(user => String(getUserStatus(user)).toLowerCase() === "active").length;
+
+            document.getElementById("inactiveUsers").textContent =
+                users.filter(user => String(getUserStatus(user)).toLowerCase() === "inactive").length;
+
+            document.getElementById("resultCount").textContent =
+                `Showing ${filteredUsers.length} of ${users.length} users`;
+
+            if (filteredUsers.length === 0) {
+                userTableBody.innerHTML = `
+                    <tr>
+                        <td colspan="7">
+                            <div class="empty-state">
+                                <strong>No users found</strong>
+                                <p>${users.length ? "Try a different search." : "Add your first user to get started."}</p>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            userTableBody.innerHTML = filteredUsers.map(user => {
+                const status = String(getUserStatus(user));
+                const isActive = status.toLowerCase() === "active";
+
+                return `
+                    <tr>
+                        <td><span class="id-badge">#${escapeHTML(getUserId(user))}</span></td>
+                        <td><strong>${escapeHTML(user.full_name)}</strong></td>
+                        <td>${escapeHTML(user.username)}</td>
+                        <td>${escapeHTML(user.email)}</td>
+                        <td>${escapeHTML(user.role_name ?? user.role ?? "Unassigned")}</td>
+                        <td>
+                            <span class="status ${isActive ? "active" : "inactive"}">
+                                ${escapeHTML(status)}
+                            </span>
+                        </td>
+                        <td>
+                            <div class="table-actions">
+                                <button
+                                    class="btn btn-small btn-edit"
+                                    type="button"
+                                    data-action="edit"
+                                    data-id="${escapeHTML(getUserId(user))}"
+                                >Edit</button>
+                                <button
+                                    class="btn btn-small btn-delete"
+                                    type="button"
+                                    data-action="delete"
+                                    data-id="${escapeHTML(getUserId(user))}"
+                                >Delete</button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }).join("");
+        }
+
+        async function loadUsers() {
+            userTableBody.innerHTML = `
+                <tr>
+                    <td colspan="7">
+                        <div class="empty-state">Loading users...</div>
+                    </td>
+                </tr>
+            `;
+
+            try {
+                const result = await apiRequest(USERS_API);
+                users = getArray(result, ["data", "users"]);
+                renderUsers();
+                hideMessage(tableMessage);
+            } catch (error) {
+                userTableBody.innerHTML = `
+                    <tr>
+                        <td colspan="7">
+                            <div class="empty-state">
+                                <strong>Unable to load users</strong>
+                                <p>${escapeHTML(error.message)}</p>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+
+                document.getElementById("resultCount").textContent = "Could not load records";
+                showMessage(tableMessage, error.message, "error");
+            }
+        }
+
+        async function refreshPage() {
+            const refreshBtn = document.getElementById("refreshBtn");
+            refreshBtn.disabled = true;
+            refreshBtn.textContent = "Refreshing...";
+
+            try {
+                await loadRoles();
+                await loadUsers();
+            } catch (error) {
+                showMessage(message, error.message, "error");
+            } finally {
+                refreshBtn.disabled = false;
+                refreshBtn.textContent = "↻ Refresh";
+            }
+        }
+
+        async function openModal(user = null) {
+            editingUserId = user ? getUserId(user) : null;
+
+            userForm.reset();
+            hideMessage(formMessage);
+
+            document.getElementById("modalTitle").textContent =
+                user ? "Edit User" : "Add User";
+
+            document.getElementById("modalDescription").textContent =
+                user ? "Update the details for this account." : "Enter the details for the new user account.";
+
+            document.getElementById("fullName").value = user?.full_name ?? "";
+            document.getElementById("username").value = user?.username ?? "";
+            document.getElementById("email").value = user?.email ?? "";
+            document.getElementById("userStatus").value = user ? getUserStatus(user) : "Active";
+            document.getElementById("password").required = !user;
+            document.getElementById("passwordRequired").hidden = Boolean(user);
+            document.getElementById("passwordHint").textContent =
+                user ? "Leave blank to keep the current password." : "At least 8 characters.";
+
+            try {
+                await loadRoles();
+
+                const userRoleId = user?.role_id ?? user?.roleId;
+
+                if (userRoleId != null) {
+                    document.getElementById("roleId").value = String(userRoleId);
+                } else if (user?.role_name || user?.role) {
+                    const userRoleName = user.role_name ?? user.role;
+                    const matchedRole = roles.find(role =>
+                        getRoleName(role) === userRoleName
+                    );
+
+                    if (matchedRole) {
+                        document.getElementById("roleId").value = String(getRoleId(matchedRole));
+                    }
+                }
+            } catch (error) {
+                showMessage(formMessage, `Could not load roles: ${error.message}`, "error");
+            }
+
+            saveUserBtn.textContent = user ? "Update User" : "Save User";
+            saveUserBtn.disabled = false;
+
+            userModal.hidden = false;
+            userModal.classList.add("open");
+            document.body.classList.add("modal-open");
+
+            setTimeout(() => document.getElementById("fullName").focus(), 50);
+        }
+
+        function closeModal() {
+            userModal.classList.remove("open");
+            userModal.hidden = true;
+            document.body.classList.remove("modal-open");
+
+            userForm.reset();
+            hideMessage(formMessage);
+
+            editingUserId = null;
+            saveUserBtn.disabled = false;
+            saveUserBtn.textContent = "Save User";
+        }
+
+        async function saveUser(event) {
+            event.preventDefault();
+            hideMessage(formMessage);
+
+            const fullName = document.getElementById("fullName").value.trim();
+            const username = document.getElementById("username").value.trim();
+            const email = document.getElementById("email").value.trim();
+            const roleId = document.getElementById("roleId").value;
+            const status = document.getElementById("userStatus").value;
+            const password = document.getElementById("password").value;
+
+            if (!fullName || !username || !email || !roleId) {
+                showMessage(formMessage, "Please complete all required fields.", "error");
+                return;
+            }
+
+            if (password && password.length < 8) {
+                showMessage(formMessage, "Password must be at least 8 characters.", "error");
+                return;
+            }
+
+            if (editingUserId === null && !password) {
+                showMessage(formMessage, "Please enter a password for the new user.", "error");
+                return;
+            }
+
+            const isEditing = editingUserId !== null;
+
+            const payload = {
+                full_name: fullName,
+                username,
+                email,
+                role_id: roleId,
+                status
+            };
+
+            if (password) {
+                payload.password = password;
+            }
+
+            const url = isEditing
+                ? `${USERS_API}/${encodeURIComponent(editingUserId)}`
+                : USERS_API;
+
+            saveUserBtn.disabled = true;
+            saveUserBtn.textContent = isEditing ? "Updating..." : "Saving...";
+
+            try {
+                await apiRequest(url, {
+                    method: isEditing ? "PUT" : "POST",
+                    body: JSON.stringify(payload)
+                });
+
+                closeModal();
+                await loadUsers();
+
+                showMessage(
+                    message,
+                    isEditing ? "User updated successfully." : "User added successfully.",
+                    "success"
+                );
+            } catch (error) {
+                showMessage(formMessage, error.message, "error");
+            } finally {
+                saveUserBtn.disabled = false;
+
+                if (!userModal.hidden) {
+                    saveUserBtn.textContent = editingUserId !== null
+                        ? "Update User"
+                        : "Save User";
+                }
+            }
+        }
+
+        async function deleteUser(id) {
+            const user = users.find(item => String(getUserId(item)) === String(id));
+
+            if (!user) {
+                showMessage(message, "User not found.", "error");
+                return;
+            }
+
+            if (!confirm(`Are you sure you want to delete the account for "${user.full_name}"?`)) {
+                return;
+            }
+
+            try {
+                await apiRequest(`${USERS_API}/${encodeURIComponent(id)}`, {
+                    method: "DELETE"
+                });
+
+                await loadUsers();
+                showMessage(message, "User deleted successfully.", "success");
+            } catch (error) {
+                showMessage(message, error.message, "error");
+            }
+        }
+
+        function closeSidebar() {
+            sidebar.classList.remove("open");
+            sidebarOverlay.classList.remove("open");
+            menuToggle.setAttribute("aria-expanded", "false");
+            menuToggle.setAttribute("aria-label", "Open navigation menu");
+        }
+
+        menuToggle.addEventListener("click", () => {
+            const isOpen = sidebar.classList.toggle("open");
+
+            sidebarOverlay.classList.toggle("open", isOpen);
+            menuToggle.setAttribute("aria-expanded", String(isOpen));
+            menuToggle.setAttribute(
+                "aria-label",
+                isOpen ? "Close navigation menu" : "Open navigation menu"
+            );
+        });
+
+        sidebarOverlay.addEventListener("click", closeSidebar);
+
+        sidebar.querySelectorAll(".nav-link").forEach(link => {
+            link.addEventListener("click", closeSidebar);
+        });
+
+        document.getElementById("addUserBtn").addEventListener("click", () => openModal());
+
+        document.getElementById("closeModalBtn").addEventListener("click", closeModal);
+        document.getElementById("cancelModalBtn").addEventListener("click", closeModal);
+
+        userModal.addEventListener("click", event => {
+            if (event.target === userModal) closeModal();
+        });
+
+        document.addEventListener("keydown", event => {
+            if (event.key === "Escape") {
+                if (!userModal.hidden) closeModal();
+                closeSidebar();
+            }
+        });
+
+        userForm.addEventListener("submit", saveUser);
+        document.getElementById("searchInput").addEventListener("input", renderUsers);
+        document.getElementById("refreshBtn").addEventListener("click", refreshPage);
+
+        userTableBody.addEventListener("click", event => {
+            const button = event.target.closest("button[data-action]");
+            if (!button) return;
+
+            const { action, id } = button.dataset;
+
+            if (action === "edit") {
+                const user = users.find(item => String(getUserId(item)) === String(id));
+                if (user) openModal(user);
+            }
+
+            if (action === "delete") {
+                deleteUser(id);
+            }
+        });
+
+        window.addEventListener("resize", () => {
+            if (window.innerWidth > 900) closeSidebar();
+        });
+
+        async function initializePage() {
+            try {
+                await loadRoles();
+            } catch (error) {
+                showMessage(message, `Could not load roles: ${error.message}`, "error");
+            }
+
+            await loadUsers();
+        }
+
+        initializePage();
+    </script>
+</body>
+</html>

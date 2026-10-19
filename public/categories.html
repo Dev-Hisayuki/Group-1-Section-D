@@ -4,560 +4,484 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Categories | School Library</title>
-
-    <style>
-        * {
-            box-sizing: border-box;
-        }
-
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: #f4f6f8;
-            color: #263238;
-        }
-
-        header {
-            background: #234b38;
-            color: white;
-            padding: 22px 6%;
-        }
-
-        header h1 {
-            margin: 0 0 6px;
-            font-size: 24px;
-        }
-
-        header p {
-            margin: 0;
-            color: #dce9df;
-            font-size: 14px;
-        }
-
-        main {
-            max-width: 1100px;
-            margin: 32px auto;
-            padding: 0 20px;
-        }
-
-        .page-heading {
-            margin-bottom: 24px;
-        }
-
-        .page-heading h2 {
-            margin-bottom: 8px;
-        }
-
-        .page-heading p {
-            color: #64748b;
-            margin: 0;
-        }
-
-        .panel {
-            background: white;
-            padding: 24px;
-            border-radius: 12px;
-            box-shadow: 0 3px 12px #152b3b0d;
-            margin-bottom: 24px;
-        }
-
-        .panel h3 {
-            margin-top: 0;
-            margin-bottom: 20px;
-        }
-
-        .form-grid {
-            display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 16px;
-        }
-
-        .field {
-            display: flex;
-            flex-direction: column;
-            gap: 7px;
-        }
-
-        .field.full {
-            grid-column: 1 / -1;
-        }
-
-        label {
-            font-size: 14px;
-            font-weight: 600;
-        }
-
-        input, textarea, select {
-            width: 100%;
-            padding: 11px 12px;
-            border: 1px solid #d5dce2;
-            border-radius: 7px;
-            font: inherit;
-            background: white;
-        }
-
-        input:focus, textarea:focus, select:focus {
-            outline: 2px solid #b7d6c2;
-            border-color: #315c43;
-        }
-
-        textarea {
-            resize: vertical;
-            min-height: 80px;
-        }
-
-        .buttons {
-            display: flex;
-            gap: 10px;
-            margin-top: 20px;
-            flex-wrap: wrap;
-        }
-
-        button {
-            border: 0;
-            border-radius: 7px;
-            padding: 10px 15px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: opacity 0.2s, transform 0.2s;
-        }
-
-        button:hover {
-            opacity: 0.88;
-            transform: translateY(-1px);
-        }
-
-        .primary {
-            background: #315c43;
-            color: white;
-        }
-
-        .secondary {
-            background: #e9eef0;
-            color: #263238;
-        }
-
-        .danger {
-            background: #fde8e7;
-            color: #a52d2d;
-        }
-
-        .table-wrap {
-            overflow-x: auto;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            min-width: 650px;
-        }
-
-        th, td {
-            padding: 14px 12px;
-            border-bottom: 1px solid #edf0f2;
-            text-align: left;
-            font-size: 14px;
-        }
-
-        th {
-            background: #f8faf9;
-            color: #53635a;
-        }
-
-        .status {
-            display: inline-block;
-            padding: 5px 9px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-        }
-
-        .active {
-            color: #236b3b;
-            background: #e3f5e8;
-        }
-
-        .inactive {
-            color: #8a5a12;
-            background: #fff1d6;
-        }
-
-        .actions {
-            display: flex;
-            gap: 7px;
-        }
-
-        .actions button {
-            padding: 7px 10px;
-        }
-
-        #message {
-            display: none;
-            padding: 12px 15px;
-            border-radius: 7px;
-            margin-bottom: 20px;
-            font-size: 14px;
-        }
-
-        #message.success {
-            display: block;
-            background: #e3f5e8;
-            color: #236b3b;
-        }
-
-        #message.error {
-            display: block;
-            background: #fde8e7;
-            color: #a52d2d;
-        }
-
-        #empty {
-            text-align: center;
-            padding: 25px;
-            color: #64748b;
-        }
-
-        .count {
-            color: #64748b;
-            font-size: 13px;
-            margin-top: 0;
-        }
-
-        @media (max-width: 650px) {
-            header {
-                padding: 20px;
-            }
-
-            main {
-                margin-top: 22px;
-                padding: 0 12px;
-            }
-
-            .panel {
-                padding: 17px;
-            }
-
-            .form-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .field.full {
-                grid-column: auto;
-            }
-        }
-    </style>
+    <title>Categories | Library Management</title>
+    <link rel="stylesheet" href="css/style.css">
 </head>
-
 <body>
-    <header>
-        <h1>School Library Management System</h1>
-        <p>Library administration / Categories</p>
-    </header>
-
-    <main>
-        <div class="page-heading">
-            <h2>Book Categories</h2>
-            <p>Create and manage the categories used to organize library books.</p>
+<div class="app">
+    <aside class="sidebar" id="sidebar">
+        <div class="brand">
+            <div class="brand-icon">📚</div>
+            <div>
+                <h2>Library Management</h2>
+                <p>School Library System</p>
+            </div>
         </div>
 
-        <div id="message" role="status" aria-live="polite"></div>
+        <nav class="nav-list">
+            <a href="/dashboard.html" class="nav-link">
+                <span>⌂</span> Dashboard
+            </a>
+            <a href="/users.html" class="nav-link">
+                <span>♙</span> Users
+            </a>
+            <a href="/roles.html" class="nav-link">
+                <span>♧</span> Roles
+            </a>
+            <a href="/categories.html" class="nav-link active" aria-current="page">
+                <span>▤</span> Categories
+            </a>
+        </nav>
+    </aside>
 
-        <section class="panel">
-            <h3 id="formTitle">Add New Category</h3>
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
-            <form id="categoryForm">
-                <div class="form-grid">
-                    <div class="field">
-                        <label for="category_name">Category Name *</label>
-                        <input
-                            id="category_name"
-                            name="category_name"
-                            type="text"
-                            maxlength="100"
-                            placeholder="e.g. Science"
-                            required
-                        >
-                    </div>
+    <main class="main">
+        <header class="topbar">
+            <button type="button" class="menu-toggle" id="menuToggle" aria-label="Toggle sidebar">
+                ☰
+            </button>
 
-                    <div class="field">
-                        <label for="status">Status</label>
-                        <select id="status" name="status">
-                            <option value="Active">Active</option>
-                            <option value="Inactive">Inactive</option>
-                        </select>
-                    </div>
-
-                    <div class="field full">
-                        <label for="description">Description</label>
-                        <textarea
-                            id="description"
-                            name="description"
-                            maxlength="255"
-                            placeholder="Describe this category"
-                        ></textarea>
-                    </div>
-                </div>
-
-                <div class="buttons">
-                    <button class="primary" type="submit" id="saveButton">
-                        Save Category
-                    </button>
-
-                    <button
-                        class="secondary"
-                        type="button"
-                        id="cancelButton"
-                        hidden
-                    >
-                        Cancel Edit
-                    </button>
-                </div>
-            </form>
-        </section>
-
-        <section class="panel">
-            <h3>Category List</h3>
-            <p class="count" id="categoryCount">Loading categories...</p>
-
-            <div class="table-wrap">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Category Name</th>
-                            <th>Description</th>
-                            <th>Status</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-
-                    <tbody id="categoryTable"></tbody>
-                </table>
+            <div>
+                <h2>Library Management</h2>
+                <p>Manage your library system records in one place.</p>
             </div>
 
-            <p id="empty" hidden>No categories found.</p>
+            <div class="topbar-user">
+                <span>Administrator</span>
+            </div>
+        </header>
+
+        <section class="content">
+            <div class="page-heading">
+                <div>
+                    <h1>Categories</h1>
+                    <p>Manage and organize your library book categories.</p>
+                </div>
+                <button type="button" class="btn btn-primary" id="addCategoryBtn">
+                    + Add Category
+                </button>
+            </div>
+
+            <div class="stats-grid">
+                <div class="panel stat-card">
+                    <p>Total Categories</p>
+                    <h2 id="totalCount">0</h2>
+                </div>
+                <div class="panel stat-card">
+                    <p>Active Categories</p>
+                    <h2 id="activeCount">0</h2>
+                </div>
+                <div class="panel stat-card">
+                    <p>Inactive Categories</p>
+                    <h2 id="inactiveCount">0</h2>
+                </div>
+            </div>
+
+            <div id="message" class="message" hidden></div>
+
+            <section class="panel">
+                <div class="panel-header">
+                    <div>
+                        <h2>Category Records</h2>
+                        <p>View and manage your book categories.</p>
+                    </div>
+                    <button type="button" class="btn btn-secondary" id="refreshButton">
+                        ↻ Refresh
+                    </button>
+                </div>
+
+                <div class="table-tools">
+                    <input
+                        type="search"
+                        id="searchInput"
+                        placeholder="Search categories..."
+                        aria-label="Search categories"
+                    >
+                    <span id="resultCount">0 categories</span>
+                </div>
+
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Category Name</th>
+                                <th>Description</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="categoryTable">
+                            <tr>
+                                <td colspan="5">Loading categories...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
         </section>
     </main>
+</div>
 
-    <script>
-        const API_URL = '/api/categories';
+<div class="modal-backdrop" id="modalBackdrop" hidden>
+    <section class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+        <div class="modal-header">
+            <div>
+                <h2 id="modalTitle">Add Category</h2>
+                <p>Enter the category information below.</p>
+            </div>
+            <button type="button" class="modal-close" id="closeModalBtn" aria-label="Close">
+                &times;
+            </button>
+        </div>
 
-        const form = document.getElementById('categoryForm');
-        const nameInput = document.getElementById('category_name');
-        const descriptionInput = document.getElementById('description');
-        const statusInput = document.getElementById('status');
-        const table = document.getElementById('categoryTable');
-        const message = document.getElementById('message');
-        const count = document.getElementById('categoryCount');
-        const empty = document.getElementById('empty');
-        const formTitle = document.getElementById('formTitle');
-        const saveButton = document.getElementById('saveButton');
-        const cancelButton = document.getElementById('cancelButton');
+        <form id="categoryForm">
+            <input type="hidden" id="categoryId">
 
-        let editingId = null;
+            <div class="form-group">
+                <label for="categoryName">Category Name</label>
+                <input
+                    type="text"
+                    id="categoryName"
+                    name="category_name"
+                    placeholder="Enter category name"
+                    maxlength="100"
+                    required
+                >
+            </div>
 
-        function showMessage(text, type) {
-            message.textContent = text;
-            message.className = type;
+            <div class="form-group">
+                <label for="categoryDescription">Description</label>
+                <textarea
+                    id="categoryDescription"
+                    name="description"
+                    rows="3"
+                    placeholder="Enter category description"
+                ></textarea>
+            </div>
 
-            window.clearTimeout(showMessage.timer);
+            <div class="form-group">
+                <label for="categoryStatus">Status</label>
+                <select id="categoryStatus" name="status" required>
+                    <option value="Active">Active</option>
+                    <option value="Inactive">Inactive</option>
+                </select>
+            </div>
 
-            showMessage.timer = window.setTimeout(() => {
-                message.textContent = '';
-                message.className = '';
-            }, 4000);
+            <div id="formMessage" class="message" hidden></div>
+
+            <div class="modal-actions">
+                <button type="button" class="btn btn-secondary" id="cancelModalBtn">
+                    Cancel
+                </button>
+                <button type="submit" class="btn btn-primary" id="saveCategoryBtn">
+                    Save Category
+                </button>
+            </div>
+        </form>
+    </section>
+</div>
+
+<script>
+const API_URL = '/api/categories';
+
+const categoryTable = document.getElementById('categoryTable');
+const searchInput = document.getElementById('searchInput');
+const categoryForm = document.getElementById('categoryForm');
+const modalBackdrop = document.getElementById('modalBackdrop');
+const message = document.getElementById('message');
+const formMessage = document.getElementById('formMessage');
+
+let categories = [];
+let editingId = null;
+
+function escapeHTML(value) {
+    return String(value ?? '').replace(/[&<>"']/g, character => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#39;'
+    })[character]);
+}
+
+function showMessage(element, text, type = 'success') {
+    element.textContent = text;
+    element.className = `message ${type}`;
+    element.hidden = false;
+}
+
+function hideMessage(element) {
+    element.hidden = true;
+    element.textContent = '';
+    element.className = 'message';
+}
+
+function getCategoryId(category) {
+    return category.category_id ?? category.id;
+}
+
+function updateStats() {
+    document.getElementById('totalCount').textContent = categories.length;
+
+    document.getElementById('activeCount').textContent =
+        categories.filter(category =>
+            String(category.status ?? 'Active').toLowerCase() === 'active'
+        ).length;
+
+    document.getElementById('inactiveCount').textContent =
+        categories.filter(category =>
+            String(category.status ?? 'Active').toLowerCase() === 'inactive'
+        ).length;
+}
+
+function renderCategories() {
+    const search = searchInput.value.trim().toLowerCase();
+
+    const filtered = categories.filter(category =>
+        String(category.category_name ?? '').toLowerCase().includes(search) ||
+        String(category.description ?? '').toLowerCase().includes(search) ||
+        String(category.status ?? '').toLowerCase().includes(search)
+    );
+
+    document.getElementById('resultCount').textContent =
+        `${filtered.length} ${filtered.length === 1 ? 'category' : 'categories'}`;
+
+    if (filtered.length === 0) {
+        categoryTable.innerHTML = `
+            <tr><td colspan="5">No categories found.</td></tr>
+        `;
+        return;
+    }
+
+    categoryTable.innerHTML = filtered.map(category => {
+        const id = getCategoryId(category);
+        const status = category.status ?? 'Active';
+        const statusClass = String(status).toLowerCase() === 'active'
+            ? 'success'
+            : 'error';
+
+        return `
+            <tr>
+                <td>${escapeHTML(id)}</td>
+                <td>${escapeHTML(category.category_name)}</td>
+                <td>${escapeHTML(category.description || '—')}</td>
+                <td>
+                    <span class="message ${statusClass}">
+                        ${escapeHTML(status)}
+                    </span>
+                </td>
+                <td>
+                    <button type="button" class="btn btn-secondary"
+                        data-action="edit" data-id="${escapeHTML(id)}">Edit</button>
+                    <button type="button" class="btn btn-danger"
+                        data-action="delete" data-id="${escapeHTML(id)}">Delete</button>
+                </td>
+            </tr>
+        `;
+    }).join('');
+}
+
+async function loadCategories() {
+    categoryTable.innerHTML = `
+        <tr><td colspan="5">Loading categories...</td></tr>
+    `;
+
+    try {
+        const response = await fetch(API_URL);
+        const result = await response.json();
+
+        if (!response.ok) {
+            throw new Error(result.message || 'Failed to load categories.');
         }
 
-        async function request(url, options = {}) {
-            const response = await fetch(url, options);
+        categories = Array.isArray(result)
+            ? result
+            : Array.isArray(result.data)
+                ? result.data
+                : [];
 
-            let result;
+        updateStats();
+        renderCategories();
+        hideMessage(message);
+    } catch (error) {
+        categoryTable.innerHTML = `
+            <tr><td colspan="5">Unable to load categories. Check your server connection.</td></tr>
+        `;
+        showMessage(message, error.message, 'error');
+    }
+}
 
-            try {
-                result = await response.json();
-            } catch {
-                throw new Error('The server returned an invalid response.');
+function openModal(category = null) {
+    categoryForm.reset();
+    hideMessage(formMessage);
+
+    editingId = category ? getCategoryId(category) : null;
+
+    document.getElementById('modalTitle').textContent =
+        category ? 'Edit Category' : 'Add Category';
+
+    document.getElementById('categoryId').value = editingId ?? '';
+    document.getElementById('categoryName').value =
+        category ? category.category_name ?? '' : '';
+    document.getElementById('categoryDescription').value =
+        category ? category.description ?? '' : '';
+    document.getElementById('categoryStatus').value =
+        category ? category.status ?? 'Active' : 'Active';
+
+    document.getElementById('saveCategoryBtn').textContent =
+        category ? 'Update Category' : 'Save Category';
+
+    modalBackdrop.hidden = false;
+    modalBackdrop.classList.add('open');
+    document.body.classList.add('modal-open');
+    document.getElementById('categoryName').focus();
+}
+
+function closeModal() {
+    modalBackdrop.classList.remove('open');
+    modalBackdrop.hidden = true;
+    document.body.classList.remove('modal-open');
+    editingId = null;
+}
+
+async function saveCategory(event) {
+    event.preventDefault();
+    hideMessage(formMessage);
+
+    const category_name = document.getElementById('categoryName').value.trim();
+    const description = document.getElementById('categoryDescription').value.trim();
+    const status = document.getElementById('categoryStatus').value;
+
+    if (!category_name) {
+        showMessage(formMessage, 'Category name is required.', 'error');
+        return;
+    }
+
+    const payload = { category_name, description, status };
+    const saveButton = document.getElementById('saveCategoryBtn');
+    saveButton.disabled = true;
+
+    try {
+        const isEditing = editingId !== null && editingId !== '';
+
+        const response = await fetch(
+            isEditing
+                ? `${API_URL}/${encodeURIComponent(editingId)}`
+                : API_URL,
+            {
+                method: isEditing ? 'PUT' : 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
             }
+        );
 
-            if (!response.ok || result.success === false) {
-                throw new Error(
-                    result.error?.message || 'The request failed.'
-                );
-            }
+        const result = await response.json().catch(() => ({}));
 
-            return result;
+        if (!response.ok) {
+            throw new Error(result.message || 'Failed to save category.');
         }
 
-        function makeCell(value) {
-            const cell = document.createElement('td');
-            cell.textContent = value ?? '';
-            return cell;
+        closeModal();
+        await loadCategories();
+        showMessage(message, result.message || 'Category saved successfully.');
+    } catch (error) {
+        showMessage(formMessage, error.message, 'error');
+    } finally {
+        saveButton.disabled = false;
+    }
+}
+
+async function deleteCategory(id) {
+    const category = categories.find(
+        item => String(getCategoryId(item)) === String(id)
+    );
+
+    if (!category) return;
+
+    if (!confirm(`Are you sure you want to delete "${category.category_name}"?`)) {
+        return;
+    }
+
+    try {
+        const response = await fetch(
+            `${API_URL}/${encodeURIComponent(id)}`,
+            { method: 'DELETE' }
+        );
+
+        const result = await response.json().catch(() => ({}));
+
+        if (!response.ok) {
+            throw new Error(result.message || 'Failed to delete category.');
         }
 
-        async function loadCategories() {
-            table.replaceChildren();
-            count.textContent = 'Loading categories...';
-            empty.hidden = true;
+        await loadCategories();
+        showMessage(message, result.message || 'Category deleted successfully.');
+    } catch (error) {
+        showMessage(message, error.message, 'error');
+    }
+}
 
-            try {
-                const result = await request(API_URL);
-                const categories = result.data || [];
+categoryForm.addEventListener('submit', saveCategory);
 
-                count.textContent =
-                    `${categories.length} categor${categories.length === 1 ? 'y' : 'ies'}`;
+categoryTable.addEventListener('click', event => {
+    const button = event.target.closest('button[data-action]');
+    if (!button) return;
 
-                for (const category of categories) {
-                    const row = document.createElement('tr');
+    const id = button.dataset.id;
 
-                    row.appendChild(makeCell(category.category_id));
-                    row.appendChild(makeCell(category.category_name));
-                    row.appendChild(makeCell(category.description || '—'));
+    if (button.dataset.action === 'edit') {
+        const category = categories.find(
+            item => String(getCategoryId(item)) === String(id)
+        );
 
-                    const statusCell = document.createElement('td');
-                    const statusLabel = document.createElement('span');
+        if (category) openModal(category);
+    }
 
-                    statusLabel.className =
-                        'status ' +
-                        (category.status === 'Active' ? 'active' : 'inactive');
+    if (button.dataset.action === 'delete') {
+        deleteCategory(id);
+    }
+});
 
-                    statusLabel.textContent = category.status;
-                    statusCell.appendChild(statusLabel);
-                    row.appendChild(statusCell);
+document.getElementById('addCategoryBtn').addEventListener('click', () => openModal());
+document.getElementById('refreshButton').addEventListener('click', loadCategories);
+document.getElementById('closeModalBtn').addEventListener('click', closeModal);
+document.getElementById('cancelModalBtn').addEventListener('click', closeModal);
+searchInput.addEventListener('input', renderCategories);
 
-                    const actionsCell = document.createElement('td');
-                    const actions = document.createElement('div');
-                    actions.className = 'actions';
+modalBackdrop.addEventListener('click', event => {
+    if (event.target === modalBackdrop) closeModal();
+});
 
-                    const editButton = document.createElement('button');
-                    editButton.type = 'button';
-                    editButton.className = 'secondary';
-                    editButton.textContent = 'Edit';
-                    editButton.addEventListener('click', () => {
-                        startEdit(category);
-                    });
+document.addEventListener('keydown', event => {
+    if (event.key === 'Escape' && !modalBackdrop.hidden) {
+        closeModal();
+    }
+});
 
-                    const deleteButton = document.createElement('button');
-                    deleteButton.type = 'button';
-                    deleteButton.className = 'danger';
-                    deleteButton.textContent = 'Delete';
-                    deleteButton.addEventListener('click', () => {
-                        deleteCategory(category.category_id, category.category_name);
-                    });
+const sidebar = document.getElementById('sidebar');
+const sidebarOverlay = document.getElementById('sidebarOverlay');
+const menuToggle = document.getElementById('menuToggle');
 
-                    actions.append(editButton, deleteButton);
-                    actionsCell.appendChild(actions);
-                    row.appendChild(actionsCell);
+menuToggle.addEventListener('click', () => {
+    sidebar.classList.toggle('open');
+    sidebarOverlay.classList.toggle('open');
+});
 
-                    table.appendChild(row);
-                }
+sidebarOverlay.addEventListener('click', () => {
+    sidebar.classList.remove('open');
+    sidebarOverlay.classList.remove('open');
+});
 
-                empty.hidden = categories.length !== 0;
-            } catch (error) {
-                count.textContent = 'Could not load categories.';
-                showMessage(error.message, 'error');
-            }
-        }
+window.addEventListener('resize', () => {
+    if (window.innerWidth > 900) {
+        sidebar.classList.remove('open');
+        sidebarOverlay.classList.remove('open');
+    }
+});
 
-        function startEdit(category) {
-            editingId = category.category_id;
-
-            nameInput.value = category.category_name;
-            descriptionInput.value = category.description || '';
-            statusInput.value = category.status;
-
-            formTitle.textContent = 'Edit Category';
-            saveButton.textContent = 'Update Category';
-            cancelButton.hidden = false;
-
-            form.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            nameInput.focus();
-        }
-
-        function resetForm() {
-            editingId = null;
-            form.reset();
-
-            formTitle.textContent = 'Add New Category';
-            saveButton.textContent = 'Save Category';
-            cancelButton.hidden = true;
-        }
-
-        form.addEventListener('submit', async (event) => {
-            event.preventDefault();
-
-            const category = {
-                category_name: nameInput.value.trim(),
-                description: descriptionInput.value.trim(),
-                status: statusInput.value
-            };
-
-            if (!category.category_name) {
-                showMessage('Please enter a category name.', 'error');
-                nameInput.focus();
-                return;
-            }
-
-            saveButton.disabled = true;
-
-            try {
-                const isEditing = editingId !== null;
-                const url = isEditing
-                    ? `${API_URL}/${editingId}`
-                    : API_URL;
-
-                await request(url, {
-                    method: isEditing ? 'PUT' : 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(category)
-                });
-
-                showMessage(
-                    isEditing
-                        ? 'Category updated successfully.'
-                        : 'Category created successfully.',
-                    'success'
-                );
-
-                resetForm();
-                await loadCategories();
-            } catch (error) {
-                showMessage(error.message, 'error');
-            } finally {
-                saveButton.disabled = false;
-            }
-        });
-
-        cancelButton.addEventListener('click', resetForm);
-
-        async function deleteCategory(id, name) {
-            const confirmed = window.confirm(
-                `Are you sure you want to delete "${name}"?`
-            );
-
-            if (!confirmed) {
-                return;
-            }
-
-            try {
-                await request(`${API_URL}/${id}`, {
-                    method: 'DELETE'
-                });
-
-                if (editingId === id) {
-                    resetForm();
-                }
-
-                showMessage('Category deleted successfully.', 'success');
-                await loadCategories();
-            } catch (error) {
-                showMessage(error.message, 'error');
-            }
-        }
-
-        loadCategories();
-    </script>
+loadCategories();
+</script>
 </body>
 </html>

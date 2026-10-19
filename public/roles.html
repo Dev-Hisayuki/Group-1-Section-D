@@ -4,605 +4,694 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Roles Management | School Library System</title>
-
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            font-family: Arial, sans-serif;
-            background: #f4f7f4;
-            color: #26352b;
-        }
-
-        header {
-            background: #294f37;
-            color: white;
-            padding: 22px 7%;
-        }
-
-        header h1 {
-            font-size: 24px;
-            margin-bottom: 6px;
-        }
-
-        header p {
-            color: #dcebdc;
-            font-size: 14px;
-        }
-
-        nav {
-            background: white;
-            padding: 14px 7%;
-            border-bottom: 1px solid #e0e8e0;
-            display: flex;
-            gap: 20px;
-            flex-wrap: wrap;
-        }
-
-        nav a {
-            color: #315c3d;
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 14px;
-        }
-
-        nav a:hover {
-            text-decoration: underline;
-        }
-
-        main {
-            width: 86%;
-            max-width: 1200px;
-            margin: 32px auto;
-        }
-
-        .page-heading {
-            margin-bottom: 22px;
-        }
-
-        .page-heading h2 {
-            font-size: 25px;
-            margin-bottom: 8px;
-        }
-
-        .page-heading p {
-            color: #718075;
-            font-size: 14px;
-        }
-
-        .layout {
-            display: grid;
-            grid-template-columns: 330px minmax(0, 1fr);
-            gap: 24px;
-            align-items: start;
-        }
-
-        .card {
-            background: white;
-            border: 1px solid #e4ebe4;
-            border-radius: 14px;
-            padding: 24px;
-            box-shadow: 0 5px 20px rgba(32, 64, 40, 0.04);
-        }
-
-        .card h3 {
-            font-size: 18px;
-            margin-bottom: 20px;
-        }
-
-        .form-group {
-            margin-bottom: 17px;
-        }
-
-        label {
-            display: block;
-            font-size: 13px;
-            font-weight: bold;
-            margin-bottom: 8px;
-        }
-
-        input,
-        textarea {
-            width: 100%;
-            padding: 11px 12px;
-            border: 1px solid #d7e0d7;
-            border-radius: 8px;
-            font: inherit;
-            font-size: 14px;
-            background: white;
-        }
-
-        input:focus,
-        textarea:focus {
-            outline: 2px solid #c8dfca;
-            border-color: #507b58;
-        }
-
-        textarea {
-            min-height: 95px;
-            resize: vertical;
-        }
-
-        .button-row {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-
-        button {
-            border: none;
-            border-radius: 8px;
-            padding: 11px 15px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: 0.2s;
-        }
-
-        button:hover {
-            transform: translateY(-1px);
-            filter: brightness(0.96);
-        }
-
-        .primary {
-            background: #315c3d;
-            color: white;
-        }
-
-        .secondary {
-            background: #e8eee8;
-            color: #344b38;
-        }
-
-        .edit-button {
-            background: #e5efe6;
-            color: #315c3d;
-        }
-
-        .delete-button {
-            background: #fae8e6;
-            color: #a23932;
-        }
-
-        .table-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 12px;
-            margin-bottom: 18px;
-            flex-wrap: wrap;
-        }
-
-        .table-header h3 {
-            margin: 0;
-        }
-
-        .count {
-            color: #657568;
-            font-size: 13px;
-        }
-
-        .table-wrapper {
-            width: 100%;
-            overflow-x: auto;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 14px;
-        }
-
-        th,
-        td {
-            padding: 14px 12px;
-            text-align: left;
-            border-bottom: 1px solid #edf1ed;
-            vertical-align: top;
-        }
-
-        th {
-            background: #f7faf7;
-            color: #637366;
-            font-size: 12px;
-            text-transform: uppercase;
-            letter-spacing: 0.4px;
-        }
-
-        td {
-            overflow-wrap: anywhere;
-        }
-
-        .role-name {
-            font-weight: bold;
-            color: #294f37;
-        }
-
-        .actions {
-            display: flex;
-            gap: 7px;
-        }
-
-        .actions button {
-            padding: 8px 10px;
-            font-size: 12px;
-        }
-
-        .message {
-            display: none;
-            margin-bottom: 18px;
-            padding: 12px 14px;
-            border-radius: 8px;
-            font-size: 14px;
-        }
-
-        .message.success {
-            display: block;
-            background: #e3f3e5;
-            color: #245b30;
-        }
-
-        .message.error {
-            display: block;
-            background: #fbe9e7;
-            color: #9a3029;
-        }
-
-        .empty {
-            text-align: center;
-            color: #7c897e;
-            padding: 28px;
-        }
-
-        footer {
-            text-align: center;
-            padding: 25px;
-            color: #7a877c;
-            font-size: 13px;
-        }
-
-        @media (max-width: 850px) {
-            .layout {
-                grid-template-columns: 1fr;
-            }
-
-            main {
-                width: 92%;
-                margin-top: 24px;
-            }
-        }
-
-        @media (max-width: 500px) {
-            header {
-                padding: 20px 5%;
-            }
-
-            nav {
-                padding: 13px 5%;
-                gap: 14px;
-            }
-
-            .card {
-                padding: 17px;
-            }
-
-            .page-heading h2 {
-                font-size: 22px;
-            }
-        }
-    </style>
+    <title>Roles | School Library Management System</title>
+    <link rel="stylesheet" href="css/style.css">
 </head>
-
 <body>
-    <header>
-        <h1>School Library Management System</h1>
-        <p>Administration Panel</p>
-    </header>
+    <div class="app">
+        <aside class="sidebar" id="sidebar">
+            <a href="/dashboard.html" class="brand">
+                <div class="brand-icon">L</div>
+                <div>
+                    <div class="brand-name">Library System</div>
+                    <div class="brand-subtitle">ADMIN PANEL</div>
+                </div>
+            </a>
 
-    <nav>
-        <a href="/">Home</a>
-        <a href="/categories.html">Categories</a>
-        <a href="/roles.html">Roles</a>
-    </nav>
+            <div class="sidebar-section">MAIN MENU</div>
 
-    <main>
-        <div class="page-heading">
-            <h2>Roles Management</h2>
-            <p>Create and manage the roles used in the library system.</p>
-        </div>
+            <nav class="nav-list">
+                <a href="/dashboard.html" class="nav-link">
+                    <span>⌂</span> Dashboard
+                </a>
+                <a href="/users.html" class="nav-link">
+                    <span>♙</span> Users
+                </a>
+                <a href="/roles.html" class="nav-link active" aria-current="page">
+                    <span>♧</span> Roles
+                </a>
+                <a href="/categories.html" class="nav-link">
+                    <span>▤</span> Categories
+                </a>
+            </nav>
 
-        <div id="message" class="message" role="status" aria-live="polite"></div>
+            <div class="sidebar-bottom">
+                <div class="sidebar-note">
+                    <strong>Library Management</strong>
+                    Manage your library system records in one place.
+                </div>
+            </div>
 
-        <div class="layout">
-            <section class="card">
-                <h3 id="formTitle">Add New Role</h3>
+            <div class="sidebar-footer">
+                <p>Administrator</p>
+                <small>School Library System</small>
+            </div>
+        </aside>
 
-                <form id="roleForm">
-                    <input type="hidden" id="roleId">
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
-                    <div class="form-group">
-                        <label for="roleName">Role Name *</label>
-                        <input
-                            type="text"
-                            id="roleName"
-                            maxlength="50"
-                            placeholder="e.g. Librarian"
-                            required
-                        >
+        <main class="main">
+            <header class="topbar">
+                <div class="topbar-left">
+                    <button
+                        class="menu-button"
+                        id="menuToggle"
+                        type="button"
+                        aria-label="Open navigation menu"
+                        aria-controls="sidebar"
+                        aria-expanded="false"
+                    >☰</button>
+
+                    <div>
+                        <h2>Roles</h2>
+                        <p>Manage system access roles</p>
                     </div>
-
-                    <div class="form-group">
-                        <label for="description">Description</label>
-                        <textarea
-                            id="description"
-                            maxlength="255"
-                            placeholder="Describe the role's responsibilities"
-                        ></textarea>
-                    </div>
-
-                    <div class="button-row">
-                        <button type="submit" class="primary" id="submitButton">
-                            Save Role
-                        </button>
-
-                        <button
-                            type="button"
-                            class="secondary"
-                            id="cancelButton"
-                            hidden
-                        >
-                            Cancel
-                        </button>
-                    </div>
-                </form>
-            </section>
-
-            <section class="card">
-                <div class="table-header">
-                    <h3>Role List</h3>
-                    <span class="count" id="roleCount">0 roles</span>
                 </div>
 
-                <div class="table-wrapper">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Role</th>
-                                <th>Description</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-
-                        <tbody id="rolesTable">
-                            <tr>
-                                <td colspan="4" class="empty">Loading roles...</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                <div class="topbar-right">
+                    <span class="topbar-label">Administrator</span>
+                    <div class="avatar">A</div>
                 </div>
-            </section>
-        </div>
-    </main>
+            </header>
 
-    <footer>
-        School Library Management System
-    </footer>
+            <section class="content">
+                <div class="page-heading">
+                    <div>
+                        <div class="eyebrow">System Administration</div>
+                        <h1>User Roles</h1>
+                        <p>Create and manage the roles assigned to system users.</p>
+                    </div>
+
+                    <button class="btn btn-primary" id="addRoleBtn" type="button">
+                        + Add Role
+                    </button>
+                </div>
+
+                <div id="message" class="message" role="status"
+                     aria-live="polite" hidden></div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div>
+                            <p class="stat-label">Total Roles</p>
+                            <div class="stat-value" id="totalRoles">0</div>
+                        </div>
+                        <div class="stat-icon">♧</div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div>
+                            <p class="stat-label">Available Roles</p>
+                            <div class="stat-value" id="availableRoles">0</div>
+                        </div>
+                        <div class="stat-icon">✓</div>
+                    </div>
+                </div>
+
+                <section class="panel">
+                    <div class="panel-header">
+                        <div>
+                            <h2 class="panel-title">Role List</h2>
+                            <p class="panel-description">
+                                View and manage the roles available in the system.
+                            </p>
+                        </div>
+
+                        <div class="table-tools">
+                            <input
+                                class="form-control"
+                                type="search"
+                                id="searchInput"
+                                placeholder="Search roles..."
+                                aria-label="Search roles"
+                            >
+
+                            <button class="btn btn-outline" id="refreshBtn" type="button">
+                                ↻ Refresh
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="table-wrap">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Role Name</th>
+                                    <th>Description</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="roleTableBody">
+                                <tr>
+                                    <td colspan="5">
+                                        <div class="empty-state">Loading roles...</div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="table-footer">
+                        <span id="resultCount">Loading records...</span>
+                        <span>Role Management</span>
+                    </div>
+                </section>
+
+                <footer class="page-footer">
+                    <span>School Library Management System</span>
+                    <span>Roles</span>
+                </footer>
+            </section>
+        </main>
+    </div>
+
+    <div class="modal-backdrop" id="roleModal" hidden>
+        <section class="modal" role="dialog" aria-modal="true"
+                 aria-labelledby="modalTitle">
+            <div class="modal-header">
+                <div>
+                    <h2 id="modalTitle">Add Role</h2>
+                    <p id="modalDescription">Enter the details for the new role.</p>
+                </div>
+
+                <button class="modal-close" id="closeModalBtn" type="button"
+                        aria-label="Close modal">&times;</button>
+            </div>
+
+            <form id="roleForm">
+                <div id="formMessage" class="message" role="alert" hidden></div>
+
+                <div class="form-group">
+                    <label for="roleName">
+                        Role Name <span aria-hidden="true">*</span>
+                    </label>
+                    <input
+                        class="form-control"
+                        type="text"
+                        id="roleName"
+                        name="role_name"
+                        maxlength="50"
+                        placeholder="e.g. Librarian"
+                        autocomplete="off"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="roleDescription">Description</label>
+                    <textarea
+                        class="form-control"
+                        id="roleDescription"
+                        name="description"
+                        rows="4"
+                        maxlength="255"
+                        placeholder="Enter a short description"
+                    ></textarea>
+                </div>
+
+                <div class="modal-actions">
+                    <button class="btn btn-secondary" id="cancelModalBtn" type="button">
+                        Cancel
+                    </button>
+                    <button class="btn btn-primary" id="saveRoleBtn" type="submit">
+                        Save Role
+                    </button>
+                </div>
+            </form>
+        </section>
+    </div>
 
     <script>
-        const API_URL = '/api/roles';
+        "use strict";
 
-        const roleForm = document.getElementById('roleForm');
-        const roleIdInput = document.getElementById('roleId');
-        const roleNameInput = document.getElementById('roleName');
-        const descriptionInput = document.getElementById('description');
-        const rolesTable = document.getElementById('rolesTable');
-        const roleCount = document.getElementById('roleCount');
-        const messageBox = document.getElementById('message');
-        const formTitle = document.getElementById('formTitle');
-        const submitButton = document.getElementById('submitButton');
-        const cancelButton = document.getElementById('cancelButton');
+        const ROLES_API = "/api/roles";
+
+        const sidebar = document.getElementById("sidebar");
+        const sidebarOverlay = document.getElementById("sidebarOverlay");
+        const menuToggle = document.getElementById("menuToggle");
+        const roleModal = document.getElementById("roleModal");
+        const roleForm = document.getElementById("roleForm");
+        const roleTableBody = document.getElementById("roleTableBody");
+        const message = document.getElementById("message");
+        const formMessage = document.getElementById("formMessage");
+        const saveRoleBtn = document.getElementById("saveRoleBtn");
 
         let roles = [];
+        let editingRoleId = null;
+        let messageTimeout = null;
+        let isSaving = false;
+        let isLoading = false;
 
-        function showMessage(message, type) {
-            messageBox.textContent = message;
-            messageBox.className = `message ${type}`;
-
-            window.setTimeout(() => {
-                messageBox.className = 'message';
-                messageBox.textContent = '';
-            }, 4000);
+        function escapeHTML(value) {
+            return String(value ?? "").replace(/[&<>"']/g, character => ({
+                "&": "&amp;",
+                "<": "&lt;",
+                ">": "&gt;",
+                '"': "&quot;",
+                "'": "&#039;"
+            })[character]);
         }
 
-        async function requestApi(url, options = {}) {
-            const response = await fetch(url, options);
-            const result = await response.json();
+        function getRoleId(role) {
+            return role.role_id ?? role.id ?? role.roleId;
+        }
 
-            if (!response.ok || result.success === false) {
+        function getRoleName(role) {
+            return String(role.role_name ?? role.name ?? role.roleName ?? "");
+        }
+
+        function getRoleDescription(role) {
+            return String(role.description ?? role.role_description ?? "");
+        }
+
+        function showMessage(element, text, type = "success") {
+            if (element === message && messageTimeout) {
+                clearTimeout(messageTimeout);
+                messageTimeout = null;
+            }
+
+            element.textContent = text;
+            element.className = `message ${type}`;
+            element.hidden = false;
+
+            if (element === message) {
+                messageTimeout = setTimeout(() => {
+                    element.hidden = true;
+                    messageTimeout = null;
+                }, 5000);
+            }
+        }
+
+        function hideMessage(element) {
+            element.hidden = true;
+            element.textContent = "";
+            element.className = "message";
+        }
+
+        async function apiRequest(url, options = {}) {
+            let response;
+
+            try {
+                response = await fetch(url, {
+                    ...options,
+                    credentials: "same-origin",
+                    headers: {
+                        ...(options.body
+                            ? { "Content-Type": "application/json" }
+                            : {}),
+                        ...options.headers
+                    }
+                });
+            } catch {
                 throw new Error(
-                    result.error?.message || 'The request failed.'
+                    "Unable to connect to the server. Check that the server is running."
                 );
             }
 
-            return result;
+            const text = await response.text();
+            let data = {};
+
+            if (text) {
+                try {
+                    data = JSON.parse(text);
+                } catch {
+                    throw new Error(
+                        "The server returned an invalid response. Check the server logs."
+                    );
+                }
+            }
+
+            if (!response.ok || data.success === false) {
+                const errorMessage =
+                    data.error?.message ||
+                    (typeof data.error === "string" ? data.error : null) ||
+                    data.message ||
+                    `Request failed (${response.status}).`;
+
+                throw new Error(errorMessage);
+            }
+
+            return data;
         }
 
-        async function loadRoles() {
-            rolesTable.innerHTML = `
-                <tr>
-                    <td colspan="4" class="empty">Loading roles...</td>
-                </tr>
-            `;
-
-            try {
-                const result = await requestApi(API_URL);
-                roles = result.data || [];
-                renderRoles();
-            } catch (error) {
-                rolesTable.innerHTML = `
-                    <tr>
-                        <td colspan="4" class="empty">Unable to load roles.</td>
-                    </tr>
-                `;
-                showMessage(error.message, 'error');
-            }
+        function getErrorMessage(error) {
+            return error instanceof Error
+                ? error.message
+                : "An unexpected error occurred.";
         }
 
         function renderRoles() {
-            roleCount.textContent =
-                `${roles.length} ${roles.length === 1 ? 'role' : 'roles'}`;
+            const keyword = document.getElementById("searchInput")
+                .value.trim().toLowerCase();
 
-            if (roles.length === 0) {
-                rolesTable.innerHTML = `
+            const filteredRoles = roles.filter(role => {
+                return String(getRoleId(role) ?? "")
+                    .toLowerCase().includes(keyword)
+                    || getRoleName(role).toLowerCase().includes(keyword)
+                    || getRoleDescription(role).toLowerCase().includes(keyword);
+            });
+
+            document.getElementById("totalRoles").textContent = roles.length;
+            document.getElementById("availableRoles").textContent = roles.length;
+            document.getElementById("resultCount").textContent =
+                `Showing ${filteredRoles.length} of ${roles.length} roles`;
+
+            if (filteredRoles.length === 0) {
+                roleTableBody.innerHTML = `
                     <tr>
-                        <td colspan="4" class="empty">
-                            No roles found. Add your first role.
+                        <td colspan="5">
+                            <div class="empty-state">
+                                <strong>No roles found</strong>
+                                <p>${roles.length
+                                    ? "Try a different search."
+                                    : "Add your first role to get started."}</p>
+                            </div>
                         </td>
                     </tr>
                 `;
                 return;
             }
 
-            rolesTable.replaceChildren();
-
-            roles.forEach(role => {
-                const row = document.createElement('tr');
-
-                const idCell = document.createElement('td');
-                idCell.textContent = role.role_id;
-
-                const nameCell = document.createElement('td');
-                nameCell.className = 'role-name';
-                nameCell.textContent = role.role_name;
-
-                const descriptionCell = document.createElement('td');
-                descriptionCell.textContent =
-                    role.description || 'No description';
-
-                const actionsCell = document.createElement('td');
-                const actions = document.createElement('div');
-                actions.className = 'actions';
-
-                const editButton = document.createElement('button');
-                editButton.type = 'button';
-                editButton.className = 'edit-button';
-                editButton.textContent = 'Edit';
-                editButton.addEventListener('click', () => editRole(role.role_id));
-
-                const deleteButton = document.createElement('button');
-                deleteButton.type = 'button';
-                deleteButton.className = 'delete-button';
-                deleteButton.textContent = 'Delete';
-                deleteButton.addEventListener('click', () => deleteRole(role.role_id));
-
-                actions.append(editButton, deleteButton);
-                actionsCell.appendChild(actions);
-                row.append(idCell, nameCell, descriptionCell, actionsCell);
-                rolesTable.appendChild(row);
-            });
+            roleTableBody.innerHTML = filteredRoles.map(role => `
+                <tr>
+                    <td>
+                        <span class="id-badge">#${escapeHTML(getRoleId(role))}</span>
+                    </td>
+                    <td><strong>${escapeHTML(getRoleName(role))}</strong></td>
+                    <td>
+                        <div class="description-cell">
+                            ${escapeHTML(getRoleDescription(role) || "No description")}
+                        </div>
+                    </td>
+                    <td><span class="status active">Available</span></td>
+                    <td>
+                        <div class="table-actions">
+                            <button
+                                class="btn btn-small btn-edit"
+                                type="button"
+                                data-action="edit"
+                                data-id="${escapeHTML(getRoleId(role))}"
+                            >Edit</button>
+                            <button
+                                class="btn btn-small btn-delete"
+                                type="button"
+                                data-action="delete"
+                                data-id="${escapeHTML(getRoleId(role))}"
+                            >Delete</button>
+                        </div>
+                    </td>
+                </tr>
+            `).join("");
         }
 
-        function resetForm() {
+        async function loadRoles() {
+            if (isLoading) return;
+
+            isLoading = true;
+            document.getElementById("refreshBtn").disabled = true;
+
+            roleTableBody.innerHTML = `
+                <tr>
+                    <td colspan="5">
+                        <div class="empty-state">Loading roles...</div>
+                    </td>
+                </tr>
+            `;
+
+            try {
+                const result = await apiRequest(ROLES_API);
+
+                if (Array.isArray(result)) {
+                    roles = result;
+                } else if (Array.isArray(result.data)) {
+                    roles = result.data;
+                } else if (Array.isArray(result.roles)) {
+                    roles = result.roles;
+                } else {
+                    throw new Error("The server returned an unexpected roles format.");
+                }
+
+                renderRoles();
+            } catch (error) {
+                roleTableBody.innerHTML = `
+                    <tr>
+                        <td colspan="5">
+                            <div class="empty-state">
+                                <strong>Unable to load roles</strong>
+                                <p>${escapeHTML(getErrorMessage(error))}</p>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+
+                document.getElementById("totalRoles").textContent = "—";
+                document.getElementById("availableRoles").textContent = "—";
+                document.getElementById("resultCount").textContent =
+                    "Could not load records";
+
+                showMessage(message, getErrorMessage(error), "error");
+            } finally {
+                isLoading = false;
+                document.getElementById("refreshBtn").disabled = false;
+            }
+        }
+
+        function openModal(role = null) {
+            if (isSaving) return;
+
+            editingRoleId = role ? getRoleId(role) : null;
+
             roleForm.reset();
-            roleIdInput.value = '';
-            formTitle.textContent = 'Add New Role';
-            submitButton.textContent = 'Save Role';
-            cancelButton.hidden = true;
+            hideMessage(formMessage);
+
+            document.getElementById("modalTitle").textContent =
+                role ? "Edit Role" : "Add Role";
+
+            document.getElementById("modalDescription").textContent =
+                role
+                    ? "Update the details for this role."
+                    : "Enter the details for the new role.";
+
+            document.getElementById("roleName").value =
+                role ? getRoleName(role) : "";
+
+            document.getElementById("roleDescription").value =
+                role ? getRoleDescription(role) : "";
+
+            saveRoleBtn.textContent = role ? "Update Role" : "Save Role";
+            saveRoleBtn.disabled = false;
+
+            roleModal.hidden = false;
+            roleModal.classList.add("open");
+            document.body.classList.add("modal-open");
+
+            setTimeout(() => {
+                document.getElementById("roleName").focus();
+            }, 50);
         }
 
-        function editRole(id) {
-            const role = roles.find(item => item.role_id === id);
+        function closeModal() {
+            if (isSaving) return;
 
-            if (!role) {
-                showMessage('Role not found.', 'error');
+            roleModal.classList.remove("open");
+            roleModal.hidden = true;
+            document.body.classList.remove("modal-open");
+
+            roleForm.reset();
+            hideMessage(formMessage);
+
+            editingRoleId = null;
+            saveRoleBtn.disabled = false;
+            saveRoleBtn.textContent = "Save Role";
+        }
+
+        async function saveRole(event) {
+            event.preventDefault();
+
+            if (isSaving) return;
+
+            hideMessage(formMessage);
+
+            const roleName = document.getElementById("roleName")
+                .value.trim();
+
+            const description = document.getElementById("roleDescription")
+                .value.trim();
+
+            if (!roleName) {
+                showMessage(formMessage, "Please enter a role name.", "error");
                 return;
             }
 
-            roleIdInput.value = role.role_id;
-            roleNameInput.value = role.role_name;
-            descriptionInput.value = role.description || '';
+            if (roleName.length > 50) {
+                showMessage(
+                    formMessage,
+                    "Role name must not exceed 50 characters.",
+                    "error"
+                );
+                return;
+            }
 
-            formTitle.textContent = 'Edit Role';
-            submitButton.textContent = 'Update Role';
-            cancelButton.hidden = false;
+            if (description.length > 255) {
+                showMessage(
+                    formMessage,
+                    "Description must not exceed 255 characters.",
+                    "error"
+                );
+                return;
+            }
 
-            roleNameInput.focus();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            const isEditing = editingRoleId !== null;
+            const url = isEditing
+                ? `${ROLES_API}/${encodeURIComponent(editingRoleId)}`
+                : ROLES_API;
+
+            isSaving = true;
+            saveRoleBtn.disabled = true;
+            saveRoleBtn.textContent = isEditing ? "Updating..." : "Saving...";
+
+            try {
+                await apiRequest(url, {
+                    method: isEditing ? "PUT" : "POST",
+                    body: JSON.stringify({
+                        role_name: roleName,
+                        description: description || null
+                    })
+                });
+
+                roleModal.classList.remove("open");
+                roleModal.hidden = true;
+                document.body.classList.remove("modal-open");
+                roleForm.reset();
+                hideMessage(formMessage);
+                editingRoleId = null;
+
+                await loadRoles();
+
+                showMessage(
+                    message,
+                    isEditing
+                        ? "Role updated successfully."
+                        : "Role added successfully.",
+                    "success"
+                );
+            } catch (error) {
+                showMessage(formMessage, getErrorMessage(error), "error");
+            } finally {
+                isSaving = false;
+                saveRoleBtn.disabled = false;
+                saveRoleBtn.textContent = editingRoleId !== null
+                    ? "Update Role"
+                    : "Save Role";
+            }
         }
 
         async function deleteRole(id) {
-            const role = roles.find(item => item.role_id === id);
+            const role = roles.find(
+                item => String(getRoleId(item)) === String(id)
+            );
 
             if (!role) {
-                showMessage('Role not found.', 'error');
+                showMessage(message, "Role not found. Refresh the list.", "error");
                 return;
             }
 
-            if (!window.confirm(`Delete the role "${role.role_name}"?`)) {
+            const roleName = getRoleName(role);
+
+            if (!confirm(
+                `Are you sure you want to delete the "${roleName}" role?\n\n` +
+                "This action cannot be undone. Roles assigned to users may not be deleted."
+            )) {
                 return;
             }
 
             try {
-                const result = await requestApi(`${API_URL}/${id}`, {
-                    method: 'DELETE'
-                });
+                await apiRequest(
+                    `${ROLES_API}/${encodeURIComponent(id)}`,
+                    { method: "DELETE" }
+                );
 
-                showMessage(result.message || 'Role deleted successfully.', 'success');
-                resetForm();
                 await loadRoles();
+                showMessage(message, "Role deleted successfully.", "success");
             } catch (error) {
-                showMessage(error.message, 'error');
+                showMessage(message, getErrorMessage(error), "error");
             }
         }
 
-        roleForm.addEventListener('submit', async event => {
-            event.preventDefault();
+        function closeSidebar() {
+            sidebar.classList.remove("open");
+            sidebarOverlay.classList.remove("open");
+            menuToggle.setAttribute("aria-expanded", "false");
+            menuToggle.setAttribute("aria-label", "Open navigation menu");
+        }
 
-            const id = roleIdInput.value;
-            const payload = {
-                role_name: roleNameInput.value.trim(),
-                description: descriptionInput.value.trim()
-            };
+        menuToggle.addEventListener("click", () => {
+            const isOpen = sidebar.classList.toggle("open");
 
-            if (!payload.role_name) {
-                showMessage('Role name is required.', 'error');
-                return;
-            }
+            sidebarOverlay.classList.toggle("open", isOpen);
+            menuToggle.setAttribute("aria-expanded", String(isOpen));
+            menuToggle.setAttribute(
+                "aria-label",
+                isOpen ? "Close navigation menu" : "Open navigation menu"
+            );
+        });
 
-            submitButton.disabled = true;
+        sidebarOverlay.addEventListener("click", closeSidebar);
 
-            try {
-                const url = id ? `${API_URL}/${id}` : API_URL;
-                const method = id ? 'PUT' : 'POST';
+        sidebar.querySelectorAll(".nav-link").forEach(link => {
+            link.addEventListener("click", closeSidebar);
+        });
 
-                const result = await requestApi(url, {
-                    method,
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(payload)
-                });
+        document.getElementById("addRoleBtn")
+            .addEventListener("click", () => openModal());
 
-                showMessage(
-                    result.message || 'Role saved successfully.',
-                    'success'
-                );
+        document.getElementById("closeModalBtn")
+            .addEventListener("click", closeModal);
 
-                resetForm();
-                await loadRoles();
-            } catch (error) {
-                showMessage(error.message, 'error');
-            } finally {
-                submitButton.disabled = false;
+        document.getElementById("cancelModalBtn")
+            .addEventListener("click", closeModal);
+
+        roleModal.addEventListener("click", event => {
+            if (event.target === roleModal) closeModal();
+        });
+
+        document.addEventListener("keydown", event => {
+            if (event.key === "Escape") {
+                if (!roleModal.hidden) closeModal();
+                closeSidebar();
             }
         });
 
-        cancelButton.addEventListener('click', resetForm);
+        roleForm.addEventListener("submit", saveRole);
+
+        document.getElementById("searchInput")
+            .addEventListener("input", renderRoles);
+
+        document.getElementById("refreshBtn")
+            .addEventListener("click", loadRoles);
+
+        roleTableBody.addEventListener("click", event => {
+            const button = event.target.closest("button[data-action]");
+            if (!button) return;
+
+            const { action, id } = button.dataset;
+
+            if (action === "edit") {
+                const role = roles.find(
+                    item => String(getRoleId(item)) === String(id)
+                );
+
+                if (role) openModal(role);
+            } else if (action === "delete") {
+                deleteRole(id);
+            }
+        });
+
+        window.addEventListener("resize", () => {
+            if (window.innerWidth > 900) closeSidebar();
+        });
 
         loadRoles();
     </script>

@@ -1,0 +1,377 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | School Library Management System</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --green: #315c43;
+            --green-dark: #244532;
+            --green-light: #e9f1e9;
+            --background: #f5f7f3;
+            --text: #26352b;
+            --muted: #788279;
+            --border: #dce3dc;
+            --white: #ffffff;
+            --danger: #b42318;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            background: var(--background);
+            color: var(--text);
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        .login-wrapper {
+            width: 100%;
+            max-width: 430px;
+        }
+
+        .brand {
+            text-align: center;
+            margin-bottom: 28px;
+        }
+
+        .brand-icon {
+            width: 58px;
+            height: 58px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+            border-radius: 18px;
+            background: var(--green);
+            color: white;
+            font-size: 28px;
+        }
+
+        .brand h1 {
+            font-size: 25px;
+            font-weight: 700;
+            letter-spacing: -0.7px;
+        }
+
+        .brand p {
+            margin-top: 9px;
+            color: var(--muted);
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .login-card {
+            padding: 34px;
+            border: 1px solid #e7ebe5;
+            border-radius: 18px;
+            background: var(--white);
+            box-shadow: 0 12px 36px rgba(35, 65, 43, 0.07);
+        }
+
+        .login-card h2 {
+            margin-bottom: 8px;
+            font-size: 23px;
+            letter-spacing: -0.5px;
+        }
+
+        .description {
+            margin-bottom: 28px;
+            color: var(--muted);
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        input {
+            width: 100%;
+            min-height: 46px;
+            padding: 12px 14px;
+            border: 1px solid var(--border);
+            border-radius: 9px;
+            outline: none;
+            background: #fff;
+            color: var(--text);
+            font-size: 14px;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        input:focus {
+            border-color: var(--green);
+            box-shadow: 0 0 0 3px rgba(49, 92, 67, 0.1);
+        }
+
+        .password-wrapper {
+            position: relative;
+        }
+
+        .password-wrapper input {
+            padding-right: 76px;
+        }
+
+        .toggle-password {
+            position: absolute;
+            top: 50%;
+            right: 12px;
+            transform: translateY(-50%);
+            border: none;
+            background: none;
+            color: var(--green);
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .login-button {
+            width: 100%;
+            min-height: 47px;
+            margin-top: 4px;
+            border: none;
+            border-radius: 9px;
+            background: var(--green);
+            color: white;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.2s;
+        }
+
+        .login-button:hover {
+            background: var(--green-dark);
+        }
+
+        .login-button:active {
+            transform: scale(0.99);
+        }
+
+        .login-button:disabled {
+            opacity: 0.65;
+            cursor: wait;
+        }
+
+        .message {
+            display: none;
+            margin-bottom: 18px;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .message.error {
+            display: block;
+            border: 1px solid #f3c5c1;
+            background: #fff1f0;
+            color: var(--danger);
+        }
+
+        .message.success {
+            display: block;
+            border: 1px solid #b9dfc3;
+            background: #edf8ef;
+            color: var(--green-dark);
+        }
+
+        .footer {
+            margin-top: 24px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 12px;
+            line-height: 1.7;
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 16px;
+            }
+
+            .login-card {
+                padding: 25px 21px;
+            }
+
+            .brand h1 {
+                font-size: 22px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <main class="login-wrapper">
+        <header class="brand">
+            <div class="brand-icon" aria-hidden="true">▤</div>
+            <h1>School Library</h1>
+            <p>Library Management System</p>
+        </header>
+
+        <section class="login-card">
+            <h2>Welcome back</h2>
+            <p class="description">
+                Sign in to access your library management dashboard.
+            </p>
+
+            <div
+                id="message"
+                class="message"
+                role="alert"
+                aria-live="polite"
+            ></div>
+
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="identifier">Username or email</label>
+                    <input
+                        type="text"
+                        id="identifier"
+                        name="identifier"
+                        placeholder="Enter your username or email"
+                        autocomplete="username"
+                        maxlength="100"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <div class="password-wrapper">
+                        <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            placeholder="Enter your password"
+                            autocomplete="current-password"
+                            required
+                        >
+                        <button
+                            type="button"
+                            class="toggle-password"
+                            id="togglePassword"
+                        >Show</button>
+                    </div>
+                </div>
+
+                <button class="login-button" id="loginButton" type="submit">
+                    Sign In
+                </button>
+            </form>
+        </section>
+
+        <footer class="footer">
+            School Library Management System<br>
+            Secure access for authorized users
+        </footer>
+    </main>
+
+    <script>
+        const loginForm = document.getElementById('loginForm');
+        const identifierInput = document.getElementById('identifier');
+        const passwordInput = document.getElementById('password');
+        const loginButton = document.getElementById('loginButton');
+        const messageBox = document.getElementById('message');
+        const togglePassword = document.getElementById('togglePassword');
+
+        function showMessage(message, type = 'error') {
+            messageBox.textContent = message;
+            messageBox.className = `message ${type}`;
+        }
+
+        togglePassword.addEventListener('click', () => {
+            const isPassword = passwordInput.type === 'password';
+
+            passwordInput.type = isPassword ? 'text' : 'password';
+            togglePassword.textContent = isPassword ? 'Hide' : 'Show';
+        });
+
+        loginForm.addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            const identifier = identifierInput.value.trim();
+            const password = passwordInput.value;
+
+            if (!identifier || !password) {
+                showMessage('Please enter your username and password.');
+                return;
+            }
+
+            loginButton.disabled = true;
+            loginButton.textContent = 'Signing in...';
+            messageBox.className = 'message';
+
+            try {
+                const response = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    credentials: 'same-origin',
+                    body: JSON.stringify({
+                        identifier,
+                        password
+                    })
+                });
+
+                const result = await response.json();
+
+                if (!response.ok || result.success !== true) {
+                    showMessage(
+                        result.message || 'Login failed. Please check your credentials.'
+                    );
+                    return;
+                }
+
+                showMessage('Login successful. Redirecting...', 'success');
+
+                window.location.replace('/dashboard.html');
+            } catch (error) {
+                showMessage(
+                    'Unable to connect to the server. Please try again.'
+                );
+            } finally {
+                loginButton.disabled = false;
+                loginButton.textContent = 'Sign In';
+            }
+        });
+
+        async function checkExistingSession() {
+            try {
+                const response = await fetch('/api/auth/me', {
+                    credentials: 'same-origin'
+                });
+
+                if (response.ok) {
+                    const result = await response.json();
+
+                    if (result.success === true && result.data) {
+                        window.location.replace('/dashboard.html');
+                    }
+                }
+            } catch (error) {
+                console.error('Unable to check login session.');
+            }
+        }
+
+        checkExistingSession();
+    </script>
+</body>
+</html>
